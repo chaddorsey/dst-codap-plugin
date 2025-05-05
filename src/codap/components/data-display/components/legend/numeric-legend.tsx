@@ -57,13 +57,13 @@ export const NumericLegend =
             marginLeft: 6, marginTop: labelHeight, marginRight: 6, ticks: 5,
             clickHandler: (bin: number, extend: boolean) => {
               const dataset = dataConfiguration.dataset
-              const binCases = dataConfiguration.getCasesForLegendBin(bin)
+              const binCases = dataConfiguration.getCasesForLegendBin(bin, partitionMethod)
               if (binCases) {
                 setOrExtendSelection(binCases, dataset, extend)
               }
             },
             casesInBinSelectedHandler: (bin: number) => {
-              return !!dataConfiguration?.casesInBinAreSelected(bin)
+              return !!dataConfiguration?.casesInBinAreSelected(bin, partitionMethod)
             }
           })
       },

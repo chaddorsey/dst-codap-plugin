@@ -601,25 +601,20 @@ export const DataConfigurationModel = types
             return value !== undefined && value >= min && value < max
           }).map((aCaseData: CaseData) => aCaseData.caseID)
           : []
-
-      }
-    }))
-  .views(self => (
-    {
-      getCasesForLegendBin(bin: number) {
-        const scale = self.legendNumericColorScale
+      },
+      getCasesForLegendBin(bin: number, partitionMethod?: 'quantile' | 'quantize'): string[] {
+        const scale = partitionMethod
+          ? self.getLegendNumericColorScale(partitionMethod)
+          : self.legendNumericColorScale;
         const thresholds = getScaleThresholds(scale)
         const min = bin === 0 ? -Infinity : thresholds[bin - 1]
         const max = bin === thresholds.length ? Infinity : thresholds[bin]
         return self.getCasesInLegendRange(min, max)
-      }
-    }))
-  .views(self => (
-    {
-      casesInBinAreSelected(quantile: number): boolean {
-        const selection = self.getCasesForLegendBin(quantile)
+      },
+      casesInBinAreSelected(bin: number, partitionMethod?: 'quantile' | 'quantize'): boolean {
+        const selection = self.getCasesForLegendBin(bin, partitionMethod)
         return !!(selection.length > 0 && selection?.every((anID: string) => self.dataset?.isCaseSelected(anID)))
-      }
+      },
     }))
   .views(self => (
     {

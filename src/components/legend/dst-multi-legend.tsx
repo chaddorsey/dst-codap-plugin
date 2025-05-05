@@ -237,6 +237,16 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
     }
   };
 
+  const handlePartitionMethodChange = (label: string, method: "quantile" | "quantize") => {
+    if (label === "Color") {
+      setColorPartitionMethod(method);
+      dataDisplayModel.colorDataConfiguration.setPartitionMethod(method);
+    } else if (label === "Size") {
+      setSizePartitionMethod(method);
+      dataDisplayModel.sizeDataConfiguration.setPartitionMethod(method);
+    }
+  };
+
   const renderLegend = (label: string, index: number, dataConfiguration?: IDstDataConfigurationModel) => {
     const selectedAttribute = label === "Color" 
       ? selectedColorAttribute 
@@ -277,7 +287,7 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
                   name={`partition-${label}`}
                   value="quantile"
                   checked={label === "Color" ? colorPartitionMethod === "quantile" : sizePartitionMethod === "quantile"}
-                  onChange={() => label === "Color" ? setColorPartitionMethod("quantile") : setSizePartitionMethod("quantile")}
+                  onChange={() => handlePartitionMethodChange(label, "quantile")}
                   data-testid={`partition-radio-quantile-${label.toLowerCase()}`}
                 />
                 Quantile
@@ -288,7 +298,7 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
                   name={`partition-${label}`}
                   value="quantize"
                   checked={label === "Color" ? colorPartitionMethod === "quantize" : sizePartitionMethod === "quantize"}
-                  onChange={() => label === "Color" ? setColorPartitionMethod("quantize") : setSizePartitionMethod("quantize")}
+                  onChange={() => handlePartitionMethodChange(label, "quantize")}
                   data-testid={`partition-radio-quantize-${label.toLowerCase()}`}
                 />
                 Quantize

@@ -63,7 +63,7 @@ export const Point = observer(function Point({ id, visible, x, y, z }: IPointPro
     }
     
     return result;
-  }, [colorDataConfig, colorLegendId, legendType]);
+  }, [colorDataConfig, colorLegendId, legendType, colorDataConfig.partitionMethod]);
   
   // Dynamic color assignment that will respond to legend changes
   let dotColor = color; // Default color

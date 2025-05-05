@@ -13,7 +13,8 @@ export const defaultPointDiameter = 6;
 
 export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataConfiguration")
   .props({
-    legendRepresentation: types.maybe(types.enumeration(["color", "size"]))
+    legendRepresentation: types.maybe(types.enumeration(["color", "size"])),
+    partitionMethod: types.optional(types.enumeration(["quantile", "quantize"]), "quantile"),
   })
   .views(self => ({
     get numericSizeTicks() {
@@ -127,13 +128,10 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
     getLegendColorForCase(id: string) {
       const legendID = self.attributeID("legend");
       const legendAttribute = self.dataset?.getAttribute(legendID);
-      
       if (!id || !legendID || !legendAttribute) {
         return "#888888";
       }
-
       const legendType = self.attributeType("legend");
-      
       if (legendType === "categorical") {
         const value = self.dataset?.getStrValue(id, legendID);
         if (!value) {
@@ -146,11 +144,34 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
         if (value == null) {
           return "#888888";
         }
+        // Use the current partitionMethod property
         const color = self.getLegendColorForNumericValue(value);
         return color;
       }
-      
       return "#888888";
+    },
+    getLegendColorForNumericValue(value: number) {
+      // Ensure partitionMethod is valid
+      const method: "quantile" | "quantize" = (self.partitionMethod === "quantile" || self.partitionMethod === "quantize") ? self.partitionMethod : "quantile";
+      const scale = self.getLegendNumericColorScale(method);
+      try {
+        const scaleFunction = typeof scale === "function" ? scale : null;
+        if (!scaleFunction) {
+          return "#888888";
+        }
+        const result = scaleFunction(value);
+        if (!result) {
+          return "#888888";
+        }
+        return result;
+      } catch {
+        return "#888888";
+      }
+    }
+  }))
+  .actions(self => ({
+    setPartitionMethod(method: "quantile" | "quantize") {
+      self.partitionMethod = method;
     }
   }));
 
