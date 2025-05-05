@@ -41,6 +41,10 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
   const [selectedColorAttribute, setSelectedColorAttribute] = useState<SafeAttribute | null>(null);
   const [selectedSizeAttribute, setSelectedSizeAttribute] = useState<SafeAttribute | null>(null);
 
+  // Partitioning method state for each legend
+  const [colorPartitionMethod, setColorPartitionMethod] = useState<"quantile" | "quantize">("quantile");
+  const [sizePartitionMethod, setSizePartitionMethod] = useState<"quantile" | "quantize">("quantile");
+
   // Load attributes from the dataset when component mounts or dataset changes
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -197,8 +201,10 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
       // Update our internal state
       if (label === "Color") {
         setSelectedColorAttribute(selectedAttr);
+        setColorPartitionMethod("quantile");
       } else if (label === "Size") {
         setSelectedSizeAttribute(selectedAttr);
+        setSizePartitionMethod("quantile");
       }
       
       // Set it in the data configuration
@@ -263,6 +269,31 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
                 ))}
               </Select>
             )}
+            {/* Controlled radio button group for quantile/quantize toggle */}
+            <div data-testid={`legend-partition-toggle-${label.toLowerCase()}`} style={{ marginLeft: 8 }}>
+              <label>
+                <input
+                  type="radio"
+                  name={`partition-${label}`}
+                  value="quantile"
+                  checked={label === "Color" ? colorPartitionMethod === "quantile" : sizePartitionMethod === "quantile"}
+                  onChange={() => label === "Color" ? setColorPartitionMethod("quantile") : setSizePartitionMethod("quantile")}
+                  data-testid={`partition-radio-quantile-${label.toLowerCase()}`}
+                />
+                Quantile
+              </label>
+              <label style={{ marginLeft: 4 }}>
+                <input
+                  type="radio"
+                  name={`partition-${label}`}
+                  value="quantize"
+                  checked={label === "Color" ? colorPartitionMethod === "quantize" : sizePartitionMethod === "quantize"}
+                  onChange={() => label === "Color" ? setColorPartitionMethod("quantize") : setSizePartitionMethod("quantize")}
+                  data-testid={`partition-radio-quantize-${label.toLowerCase()}`}
+                />
+                Quantize
+              </label>
+            </div>
           </Flex>
           
           {/* For regular attributes, we can safely show the full legend */}
@@ -272,6 +303,7 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
                 <Legend layerIndex={index}
                        setDesiredExtent={setDesiredExtent}
                        onDropAttribute={(place, dataSet, attributeID) => onChangeAttribute(dataSet, attributeID, dataDisplayModel.layers[index])}
+                       partitionMethod={label === "Color" ? colorPartitionMethod : sizePartitionMethod}
                 />
               </DataConfigurationContext.Provider>
             </div>

@@ -29,10 +29,11 @@ interface ILegendProps {
   layerIndex: number
   setDesiredExtent: (layerIndex:number, extent: number) => void
   onDropAttribute: (place: GraphPlace, dataSet: IDataSet, attrId: string) => void
+  partitionMethod?: 'quantile' | 'quantize'
 }
 
 export const Legend = observer(function Legend({
-                                        layerIndex, setDesiredExtent, onDropAttribute
+                                        layerIndex, setDesiredExtent, onDropAttribute, partitionMethod
                                       }: ILegendProps) {
   const dataConfiguration = useDataConfigurationContext(),
     attrType = dataConfiguration?.attributeType('legend'),
@@ -46,7 +47,7 @@ export const Legend = observer(function Legend({
         <LegendAttributeLabel
           onChangeAttribute={onDropAttribute}
         />
-        {LegendComponent && <LegendComponent layerIndex={layerIndex} setDesiredExtent={setDesiredExtent} />}
+        {LegendComponent && <LegendComponent layerIndex={layerIndex} setDesiredExtent={setDesiredExtent} partitionMethod={partitionMethod} />}
       </svg>
     </>
   ) : null

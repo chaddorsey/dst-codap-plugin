@@ -472,49 +472,28 @@ export const DataConfigurationModel = types
     }
   }))
   .views(self => ({
-    get legendNumericColorScale() {
-      // TODO: Handle the displayOnlySelectedCases better. What we would like to do is
-      // to basically ignore displayOnlySelectedCases when computing the legend bins.
-      // This way the legend will not jump around when the user is selecting different
-      // cases when in displayOnlySelectedCases mode.
-      // There are several criteria besides displayOnlySelectedCases which impact which
-      // cases are shown on the visualization:
-      // - set aside cases in the dataset should be excluded
-      // - cases filtered by the filter formula in the dataset should be excluded
-      // - cases hidden in the visualization should be excluded
-      // - cases filtered by the filter formula in the visualization should be excluded
-      // - cases that are not plottable on at least one of the plots of the visualization
-      //   should be excluded
-      // All of these criteria are handled by numericValuesForAttrRole("legend") but it also
-      // excludes unselected cases if displayOnlySelectedCases is enabled.
-      // It would make sense for numericValuesForAttrRole to ignore the
-      // displayOnlySelectedCases criteria. It is used here and also to compute the axis extents.
-      // The axes should also not jump around when using displayOnlySelectedCases.
-      // Implementing this is hard because of the last bullet. Handling the "not plottable"
-      // cases is done by the FilteredCases system which is overridden by the
-      // GraphDataConfigurationModel in order to handle graphs with multiple y axes. This
-      // FilterCases system is also what implements displayOnlySelectedCases.
-      // The best solution might be to separate the displayOnlySelectedCases from FilterCases,
-      // perhaps by renaming it PlottableCases and then apply the displayOnlySelectedCases
-      // criteria further up chain of filters.
-      const values = self.numericValuesForAttrRole("legend") ?? []
-      
-      const legendAttrId = self.attributeID("legend")
-      const binningType = self.metadata?.getAttributeBinningType(legendAttrId)
-      
-      switch (binningType) {
+    getLegendNumericColorScale(partitionMethod: 'quantile' | 'quantize') {
+      const values = self.numericValuesForAttrRole("legend") ?? [];
+      const legendAttrIdForMethod = self.attributeID("legend");
+      switch (partitionMethod) {
         case "quantize": {
-          const extents = extent(values)
-          if (extents[0] == null || extents[1] == null) {
-            return scaleQuantize([], self.choroplethColors)
+          const extents = extent(values);
+          // Only call scaleQuantize if extents are valid numbers
+          if (typeof extents[0] !== 'number' || typeof extents[1] !== 'number' || isNaN(extents[0]) || isNaN(extents[1])) {
+            return scaleQuantize([], self.choroplethColors);
           }
-          return scaleQuantize(extents, self.choroplethColors)
-
+          return scaleQuantize(extents, self.choroplethColors);
         }
         case "quantile":
         default:
-          return scaleQuantile(values, self.choroplethColors)
+          return scaleQuantile(values, self.choroplethColors);
       }
+    },
+    get legendNumericColorScale() {
+      // Use the binning type from metadata for backward compatibility
+      const legendAttrIdForGetter = self.attributeID("legend");
+      const binningTypeForGetter = self.metadata?.getAttributeBinningType(legendAttrIdForGetter);
+      return this.getLegendNumericColorScale(binningTypeForGetter === 'quantize' ? 'quantize' : 'quantile');
     },
   }))
   .views(self => (
