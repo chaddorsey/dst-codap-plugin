@@ -97,4 +97,14 @@ describe("Legend Partitioning Toggle", () => {
   it("maintains independent toggles for multiple legends", () => {
     // TODO: Render multiple legends and check that toggles are independent
   });
+
+  it("reflects MST model's partitionMethod for size legend on initial render", async () => {
+    render(<DstMultiLegend divElt={null} onChangeAttribute={mockOnChangeAttribute} />);
+    // Wait for the radio buttons to appear
+    const sizeQuantize = await screen.findByTestId("partition-radio-quantize-size");
+    const sizeQuantile = await screen.findByTestId("partition-radio-quantile-size");
+    // By default, MST model sets partitionMethod to 'quantize' for size legend
+    expect(sizeQuantize).toBeChecked();
+    expect(sizeQuantile).not.toBeChecked();
+  });
 }); 

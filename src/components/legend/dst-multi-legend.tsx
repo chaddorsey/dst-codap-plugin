@@ -45,6 +45,14 @@ export const DstMultiLegend = observer(function MultiLegend({divElt, onChangeAtt
   const [colorPartitionMethod, setColorPartitionMethod] = useState<"quantile" | "quantize">("quantile");
   const [sizePartitionMethod, setSizePartitionMethod] = useState<"quantile" | "quantize">("quantile");
 
+  // Sync sizePartitionMethod state with MST model's partitionMethod for size legend
+  useEffect(() => {
+    const mstPartition = dataDisplayModel.sizeDataConfiguration.partitionMethod;
+    if (mstPartition !== sizePartitionMethod) {
+      setSizePartitionMethod(mstPartition as "quantile" | "quantize");
+    }
+  }, [dataDisplayModel.sizeDataConfiguration.partitionMethod, sizePartitionMethod]);
+
   // Load attributes from the dataset when component mounts or dataset changes
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   useEffect(() => {
