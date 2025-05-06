@@ -1,22 +1,22 @@
 "use strict";
 import React from "react";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+let __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+let __generator = (this && this.__generator) || function (thisArg, body) {
+    let _ = { label: 0, sent() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g.throw = verb(1), g.return = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        while (g && (g = 0, op[0] && (_ = 0)), _) {try {
+            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
@@ -32,15 +32,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     _.trys.pop(); continue;
             }
             op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }}
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_2 = require("@testing-library/react");
-var dataset_config_panel_1 = require("../dataset-config-panel");
-var dataset_config_1 = require("../../models/dataset-config");
-var react_3 = require("@chakra-ui/react");
+let react_2 = require("@testing-library/react");
+let dataset_config_panel_1 = require("../dataset-config-panel");
+let dataset_config_1 = require("../../models/dataset-config");
+let react_3 = require("@chakra-ui/react");
 import { ui } from "../../models/ui";
 // Create mocks before importing the modules
 jest.mock("../../utilities/codap-dataset-utils", function () { return ({
@@ -53,8 +53,8 @@ jest.mock("../../utilities/codap-interface-helpers", function () { return ({
     saveInteractiveState: jest.fn().mockResolvedValue({ success: true })
 }); });
 // Import the mocked modules
-var codapDatasetUtils = require("../../utilities/codap-dataset-utils");
-var codapInterfaceHelpers = require("../../utilities/codap-interface-helpers");
+let codapDatasetUtils = require("../../utilities/codap-dataset-utils");
+let codapInterfaceHelpers = require("../../utilities/codap-interface-helpers");
 // Mock the datasetConfig
 jest.mock("../../models/dataset-config", function () { return ({
     datasetConfig: {
@@ -120,7 +120,7 @@ describe("DatasetConfigPanel", function () {
                 case 0:
                     (0, react_2.render)(<react_3.ChakraProvider>
         <dataset_config_panel_1.DatasetConfigPanel />
-      </react_3.ChakraProvider>);
+                                        </react_3.ChakraProvider>);
                     // Wait for datasets to load
                     return [4 /*yield*/, (0, react_2.waitFor)(function () {
                             expect(react_2.screen.getByText("Configure Dataset")).toBeInTheDocument();
@@ -143,13 +143,13 @@ describe("DatasetConfigPanel", function () {
         });
     }); });
     it("should show attribute mapping controls after dataset selection", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var rerender;
+        let rerender;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     rerender = (0, react_2.render)(<react_3.ChakraProvider>
         <dataset_config_panel_1.DatasetConfigPanel />
-      </react_3.ChakraProvider>).rerender;
+                                                   </react_3.ChakraProvider>).rerender;
                     // Wait for datasets to load
                     return [4 /*yield*/, (0, react_2.waitFor)(function () {
                             expect(react_2.screen.getByLabelText(/Select Dataset/i)).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe("DatasetConfigPanel", function () {
                     // Re-render with the updated dataContextName
                     rerender(<react_3.ChakraProvider>
         <dataset_config_panel_1.DatasetConfigPanel />
-      </react_3.ChakraProvider>);
+                             </react_3.ChakraProvider>);
                     // Verify attribute selectors are shown
                     return [4 /*yield*/, (0, react_2.waitFor)(function () {
                             expect(react_2.screen.getByTestId("latitude-select")).toBeInTheDocument();
@@ -195,9 +195,9 @@ describe("DatasetConfigPanel", function () {
             }, []);
             return (<react_3.ChakraProvider>
           <dataset_config_panel_1.DatasetConfigPanel />
-        </react_3.ChakraProvider>);
+                    </react_3.ChakraProvider>);
         }
-        var latitudeSelect, longitudeSelect, dateSelect;
+        let latitudeSelect, longitudeSelect, dateSelect;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -235,13 +235,13 @@ describe("DatasetConfigPanel", function () {
         });
     }); });
     it("should enable apply button when configuration is valid", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var rerender, applyButton;
+        let rerender, applyButton;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     rerender = (0, react_2.render)(<react_3.ChakraProvider>
     <dataset_config_panel_1.DatasetConfigPanel />
-  </react_3.ChakraProvider>).rerender;
+                                                   </react_3.ChakraProvider>).rerender;
                     // Set all required fields and isValid to true
                     mockedDatasetConfig.dataContextName = "Dataset1";
                     mockedDatasetConfig.latitudeAttribute = "Latitude";
@@ -250,7 +250,7 @@ describe("DatasetConfigPanel", function () {
                     mockedDatasetConfig.isValid = true;
                     rerender(<react_3.ChakraProvider>
     <dataset_config_panel_1.DatasetConfigPanel />
-  </react_3.ChakraProvider>);
+                             </react_3.ChakraProvider>);
                     // Wait for button to be enabled
                     return [4 /*yield*/, (0, react_2.waitFor)(function () {
                             applyButton = react_2.screen.getByText("Apply Configuration");
@@ -276,7 +276,7 @@ describe("DatasetConfigPanel", function () {
                     }); });
                     (0, react_2.render)(<react_3.ChakraProvider>
         <dataset_config_panel_1.DatasetConfigPanel />
-      </react_3.ChakraProvider>);
+                                        </react_3.ChakraProvider>);
                     // Wait for datasets to load
                     return [4 /*yield*/, (0, react_2.waitFor)(function () {
                             expect(react_2.screen.getByLabelText(/Select Dataset/i)).toBeInTheDocument();

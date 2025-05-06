@@ -1,23 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.hasOwnProperty = hasOwnProperty;
-exports.castArrayCopy = castArrayCopy;
-exports.safeDecodeURI = safeDecodeURI;
-exports.safeJsonParse = safeJsonParse;
-exports.typedId = typedId;
-exports.uniqueId = uniqueId;
-exports.uniqueName = uniqueName;
-exports.safeDomIdentifier = safeDomIdentifier;
-exports.isEquivalentArray = isEquivalentArray;
-exports.isEquivalentSet = isEquivalentSet;
-exports.hashString = hashString;
-exports.hashStringSet = hashStringSet;
-exports.hashStringSets = hashStringSets;
-exports.hashOrderedStringSet = hashOrderedStringSet;
-var nanoid_1 = require("nanoid");
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.hasOwnProperty = hasOwnProperty
+exports.castArrayCopy = castArrayCopy
+exports.safeDecodeURI = safeDecodeURI
+exports.safeJsonParse = safeJsonParse
+exports.typedId = typedId
+exports.uniqueId = uniqueId
+exports.uniqueName = uniqueName
+exports.safeDomIdentifier = safeDomIdentifier
+exports.isEquivalentArray = isEquivalentArray
+exports.isEquivalentSet = isEquivalentSet
+exports.hashString = hashString
+exports.hashStringSet = hashStringSet
+exports.hashStringSets = hashStringSets
+exports.hashOrderedStringSet = hashOrderedStringSet
+let nanoid_1 = require("nanoid")
 // Use custom alphabet to avoid ambiguous characters, especially during mathematical formula evaluations.
 // By default, nanoid uses "-" sign, which is used in formulas for subtraction.
-var nanoid = (0, nanoid_1.customAlphabet)("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz", 21);
+let nanoid = (0, nanoid_1.customAlphabet)("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz", 21)
 /*
  * hasOwnProperty()
  *
@@ -28,7 +28,7 @@ var nanoid = (0, nanoid_1.customAlphabet)("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_
  * for some of the subtleties here.
  */
 function hasOwnProperty(obj, property) {
-    return Object.prototype.hasOwnProperty.call(obj, property);
+    return Object.prototype.hasOwnProperty.call(obj, property)
 }
 /*
  * castArrayCopy()
@@ -38,7 +38,7 @@ function hasOwnProperty(obj, property) {
 function castArrayCopy(itemOrArray) {
     return Array.isArray(itemOrArray)
         ? itemOrArray.slice()
-        : [itemOrArray];
+        : [itemOrArray]
 }
 /*
  * safeDecodeURI()
@@ -46,14 +46,14 @@ function castArrayCopy(itemOrArray) {
  * returns the original string on error rather than throwing an exception
  */
 function safeDecodeURI(uriOrComponent) {
-    var decoded;
+    let decoded
     try {
-        decoded = decodeURIComponent(uriOrComponent);
+        decoded = decodeURIComponent(uriOrComponent)
     }
     catch (e) {
         // swallow errors
     }
-    return decoded || uriOrComponent;
+    return decoded || uriOrComponent
 }
 /*
  * safeJsonParse()
@@ -61,14 +61,14 @@ function safeDecodeURI(uriOrComponent) {
  * returns undefined on error rather than throwing an exception
  */
 function safeJsonParse(json) {
-    var parsed;
+    let parsed
     try {
-        parsed = json ? JSON.parse(json) : undefined;
+        parsed = json ? JSON.parse(json) : undefined
     }
     catch (e) {
         // swallow errors
     }
-    return parsed;
+    return parsed
 }
 /*
  * typedId()
@@ -76,9 +76,9 @@ function safeJsonParse(json) {
  * returns a unique id string prepended with a supplied prefix
  */
 function typedId(type, idLength) {
-    if (idLength === void 0) { idLength = 12; }
+    if (idLength === void 0) { idLength = 12 }
     // cf. https://zelark.github.io/nano-id-cc/
-    return "".concat(type).concat(nanoid(idLength));
+    return "".concat(type).concat(nanoid(idLength))
 }
 /*
  * uniqueId()
@@ -86,9 +86,9 @@ function typedId(type, idLength) {
  * returns a unique id string
  */
 function uniqueId(idLength) {
-    if (idLength === void 0) { idLength = 16; }
+    if (idLength === void 0) { idLength = 16 }
     // cf. https://zelark.github.io/nano-id-cc/
-    return nanoid(idLength);
+    return nanoid(idLength)
 }
 /*
  * uniqueName()
@@ -96,14 +96,14 @@ function uniqueId(idLength) {
  * returns a unique name from a given base name, adding a numeric suffix if necessary
  */
 function uniqueName(base, isValid, space) {
-    if (space === void 0) { space = ""; }
+    if (space === void 0) { space = "" }
     if (isValid(base))
-        return base;
-    var name;
-    for (var i = 2; !isValid(name = "".concat(base).concat(space).concat(i)); ++i) {
+        {return base}
+    let name
+    for (let i = 2; !isValid(name = "".concat(base).concat(space).concat(i)); ++i) {
         // nothing to do
     }
-    return name;
+    return name
 }
 /*
  * safeDomIdentifier()
@@ -112,10 +112,10 @@ function uniqueName(base, isValid, space) {
  */
 function safeDomIdentifier(value) {
     // Replace spaces and non-alphanumeric characters with dashes
-    var sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "-");
+    let sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "-")
     // Ensure value doesn't start with a number
-    var validId = sanitizedValue.replace(/^([0-9])/, "_$1");
-    return validId;
+    let validId = sanitizedValue.replace(/^([0-9])/, "_$1")
+    return validId
 }
 /*
  * isEquivalentArray()
@@ -124,7 +124,7 @@ function safeDomIdentifier(value) {
  */
 function isEquivalentArray(array1, array2) {
     return array1.length === array2.length &&
-        array1.every(function (value, index) { return value === array2[index]; });
+        array1.every(function (value, index) { return value === array2[index] })
 }
 /*
  * isEquivalentSet()
@@ -133,13 +133,13 @@ function isEquivalentArray(array1, array2) {
  */
 function isEquivalentSet(set1, set2) {
     if (set1.size !== set2.size)
-        return false;
-    for (var _i = 0, set1_1 = set1; _i < set1_1.length; _i++) {
-        var elem = set1_1[_i];
+        {return false}
+    for (let _i = 0, set1_1 = set1; _i < set1_1.length; _i++) {
+        let elem = set1_1[_i]
         if (!set2.has(elem))
-            return false;
+            {return false}
     }
-    return true;
+    return true
 }
 /*
  * hashString()
@@ -149,13 +149,13 @@ function isEquivalentSet(set1, set2) {
  */
 function hashString(str) {
     // Simple hash function for a single string (e.g., DJB2)
-    var hash = 5381;
-    for (var i = 0; i < str.length; i++) {
+    let hash = 5381
+    for (let i = 0; i < str.length; i++) {
         // eslint-disable-next-line no-bitwise
-        hash = (hash * 33) ^ str.charCodeAt(i);
+        hash = (hash * 33) ^ str.charCodeAt(i)
     }
     // eslint-disable-next-line no-bitwise
-    return hash >>> 0; // Convert to unsigned 32-bit integer
+    return hash >>> 0 // Convert to unsigned 32-bit integer
 }
 /*
  * hashStringSet()
@@ -167,7 +167,7 @@ function hashStringSet(strings) {
     return strings
         .map(hashString)
         // eslint-disable-next-line no-bitwise
-        .reduce(function (acc, hash) { return acc ^ hash; }, 0); // XOR all individual hashes
+        .reduce(function (acc, hash) { return acc ^ hash }, 0) // XOR all individual hashes
 }
 /*
  * hashStringSets()
@@ -179,7 +179,7 @@ function hashStringSets(stringSets) {
     return stringSets
         .map(hashStringSet)
         // eslint-disable-next-line no-bitwise
-        .reduce(function (acc, hash) { return acc ^ hash; }, 0); // XOR all individual hashes
+        .reduce(function (acc, hash) { return acc ^ hash }, 0) // XOR all individual hashes
 }
 /*
  * hashOrderedStringSet()
@@ -189,6 +189,6 @@ function hashStringSets(stringSets) {
  */
 function hashOrderedStringSet(strings) {
     return strings
-        .map(function (str, index) { return hashString(str) * (index + 1); }) // Multiply hash by index + 1 to reflect position
-        .reduce(function (acc, hash) { return acc + hash; }, 0); // sum all individual hashes
+        .map(function (str, index) { return hashString(str) * (index + 1) }) // Multiply hash by index + 1 to reflect position
+        .reduce(function (acc, hash) { return acc + hash }, 0) // sum all individual hashes
 }

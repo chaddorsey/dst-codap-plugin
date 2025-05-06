@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.codapData = void 0;
-var mobx_1 = require("mobx");
-var constants_1 = require("../utilities/constants");
-var dst_container_1 = require("./dst-container");
-var dataset_config_1 = require("./dataset-config");
-var date_utils_1 = require("../utilities/date-utils");
-var CodapData = /** @class */ (function () {
+let mobx_1 = require("mobx");
+let constants_1 = require("../utilities/constants");
+let dst_container_1 = require("./dst-container");
+let dataset_config_1 = require("./dataset-config");
+let date_utils_1 = require("../utilities/date-utils");
+let CodapData = /** @class */ (function () {
     function CodapData() {
         this.absoluteMinDate = 1578124800000;
         this.absoluteMaxDate = 1672358400000;
@@ -14,22 +14,22 @@ var CodapData = /** @class */ (function () {
         (0, mobx_1.makeAutoObservable)(this);
     }
     Object.defineProperty(CodapData.prototype, "absoluteDateRange", {
-        get: function () {
+        get () {
             return this.absoluteMaxDate - this.absoluteMinDate;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CodapData.prototype, "caseIds", {
-        get: function () {
-            var _a, _b;
+        get () {
+            let _a, _b;
             return (_b = (_a = this.dataSet.getCollectionByName(constants_1.kCollectionName)) === null || _a === void 0 ? void 0 : _a.caseIds) !== null && _b !== void 0 ? _b : [];
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CodapData.prototype, "dataSet", {
-        get: function () {
+        get () {
             return dst_container_1.dstContainer.dataSet;
         },
         enumerable: false,
@@ -42,7 +42,7 @@ var CodapData = /** @class */ (function () {
      * @returns The numeric value or undefined if not a number
      */
     CodapData.prototype.getAttributeNumericValue = function (attributeName, caseId) {
-        var value = this.getAttributeValue(attributeName, caseId);
+        let value = this.getAttributeValue(attributeName, caseId);
         return value ? +value : undefined;
     };
     /**
@@ -52,9 +52,9 @@ var CodapData = /** @class */ (function () {
      * @returns The attribute value as a string or undefined
      */
     CodapData.prototype.getAttributeValue = function (attributeName, caseId) {
-        var _a;
-        var attributeId = (_a = this.dataSet.getAttributeByName(attributeName)) === null || _a === void 0 ? void 0 : _a.id;
-        var value = attributeId ? this.dataSet.getValue(caseId, attributeId) : undefined;
+        let _a;
+        let attributeId = (_a = this.dataSet.getAttributeByName(attributeName)) === null || _a === void 0 ? void 0 : _a.id;
+        let value = attributeId ? this.dataSet.getValue(caseId, attributeId) : undefined;
         // Ensure we return a string or undefined
         return value !== undefined ? String(value) : undefined;
     };
@@ -67,7 +67,7 @@ var CodapData = /** @class */ (function () {
     CodapData.prototype.getCaseDate = function (caseId) {
         // If we have a configured date attribute, use it
         if (dataset_config_1.datasetConfig.dateAttribute) {
-            var dateStr = this.getAttributeValue(dataset_config_1.datasetConfig.dateAttribute, caseId);
+            let dateStr = this.getAttributeValue(dataset_config_1.datasetConfig.dateAttribute, caseId);
             if (dateStr) {
                 var timestamp = (0, date_utils_1.parseDate)(dateStr, dataset_config_1.datasetConfig.dateFormat);
                 if (timestamp) {
@@ -79,9 +79,9 @@ var CodapData = /** @class */ (function () {
             }
         }
         // Fallback to Year, Month, Day attributes if date parsing fails
-        var year = this.getAttributeNumericValue("Year", caseId);
-        var month = this.getAttributeNumericValue("Month", caseId);
-        var day = this.getAttributeNumericValue("Day", caseId);
+        let year = this.getAttributeNumericValue("Year", caseId);
+        let month = this.getAttributeNumericValue("Month", caseId);
+        let day = this.getAttributeNumericValue("Day", caseId);
         if (year !== undefined || month !== undefined || day !== undefined) {
             var timestamp = (0, date_utils_1.createDateFromComponents)(year, month, day);
             if (timestamp) {

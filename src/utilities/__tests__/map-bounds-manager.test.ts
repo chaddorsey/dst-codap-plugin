@@ -1,10 +1,10 @@
-import { MapBoundsManager, Bounds } from '../map-bounds-manager';
-import { graph } from '../../models/graph';
-import { codapInterface } from '../codap-interface';
-import { codapData } from '../../models/codap-data';
+import { MapBoundsManager, Bounds } from "../map-bounds-manager";
+import { graph } from "../../models/graph";
+import { codapInterface } from "../codap-interface";
+import { codapData } from "../../models/codap-data";
 
 // Mock CODAP interface
-jest.mock('../codap-interface', () => ({
+jest.mock("../codap-interface", () => ({
   codapInterface: {
     sendRequest: jest.fn()
   }
@@ -28,7 +28,7 @@ interface MockGraph {
 }
 
 // Mock the graph model
-jest.mock('../../models/graph', () => ({
+jest.mock("../../models/graph", () => ({
   graph: {
     absoluteMinLatitude: 0,
     absoluteMaxLatitude: 0,
@@ -46,7 +46,7 @@ jest.mock('../../models/graph', () => ({
   } as MockGraph
 }));
 
-describe('MapBoundsManager', () => {
+describe("MapBoundsManager", () => {
   let mapBoundsManager: MapBoundsManager;
   let mockGraph: MockGraph;
   let caseIdsSpy: jest.SpyInstance;
@@ -56,14 +56,14 @@ describe('MapBoundsManager', () => {
     mockGraph = graph as unknown as MockGraph;
     // Reset all graph properties before each test
     Object.keys(mockGraph).forEach(key => {
-      if (typeof mockGraph[key as keyof MockGraph] === 'number') {
+      if (typeof mockGraph[key as keyof MockGraph] === "number") {
         (mockGraph[key as keyof MockGraph] as number) = 0;
       }
     });
     mockGraph.animateTo.mockClear();
     (codapInterface.sendRequest as jest.Mock).mockClear();
     // Spy on codapData.caseIds getter on the prototype
-    caseIdsSpy = jest.spyOn(Object.getPrototypeOf(codapData), 'caseIds', 'get').mockReturnValue([]);
+    caseIdsSpy = jest.spyOn(Object.getPrototypeOf(codapData), "caseIds", "get").mockReturnValue([]);
     (codapData.getLatitude as any) = jest.fn();
     (codapData.getLongitude as any) = jest.fn();
   });
@@ -75,8 +75,8 @@ describe('MapBoundsManager', () => {
     }
   });
 
-  describe('setWorldMapBounds', () => {
-    it('should set world map bounds correctly (via updateMapBounds)', async () => {
+  describe("setWorldMapBounds", () => {
+    it("should set world map bounds correctly (via updateMapBounds)", async () => {
       await mapBoundsManager.updateMapBounds();
       // Check absolute bounds
       expect(mockGraph.absoluteMinLatitude).toBe(-90);
@@ -96,8 +96,8 @@ describe('MapBoundsManager', () => {
     });
   });
 
-  describe('updateMapBounds', () => {
-    it('should set world bounds and not animate if no in-memory data', async () => {
+  describe("updateMapBounds", () => {
+    it("should set world bounds and not animate if no in-memory data", async () => {
       await mapBoundsManager.updateMapBounds();
       expect(mockGraph.absoluteMinLatitude).toBe(-90);
       expect(mockGraph.absoluteMaxLatitude).toBe(90);
@@ -106,9 +106,9 @@ describe('MapBoundsManager', () => {
       expect(mockGraph.animateTo).not.toHaveBeenCalled();
     });
 
-    it('should animate to bounds if in-memory data is present', async () => {
+    it("should animate to bounds if in-memory data is present", async () => {
       // Simulate in-memory data
-      caseIdsSpy.mockReturnValue(['case1', 'case2']);
+      caseIdsSpy.mockReturnValue(["case1", "case2"]);
       (codapData.getLatitude as any) = jest.fn()
         .mockReturnValueOnce(10)
         .mockReturnValueOnce(20);

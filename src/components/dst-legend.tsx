@@ -13,14 +13,14 @@ import { kInitialDimensions } from "../utilities/constants";
 import { DstDataDisplayModelContext } from "./hooks/use-dst-data-display-model";
 import { CategoricalSizeLegend } from "./legend/categorical-size-legend";
 import { DstMultiLegend } from "./legend/dst-multi-legend";
-import { NumericSizeLegend } from "./legend/numeric-size-legend";
+import { NumericSizeLegendReboot } from "./legend/numeric-size-legend-reboot";
 import { datasetConfig } from "../models/dataset-config";
 
 import "./dst-legend.scss";
 
 const sizeLegendComponentMap: Partial<Record<string, React.ComponentType<IBaseLegendProps>>> = {
   categorical: CategoricalSizeLegend,
-  numeric: NumericSizeLegend
+  numeric: NumericSizeLegendReboot
 };
 
 // register our new legends

@@ -473,27 +473,27 @@ export const DataConfigurationModel = types
   }))
   .views(self => ({
     getLegendNumericColorScale(partitionMethod: 'quantile' | 'quantize') {
-      const values = self.numericValuesForAttrRole("legend") ?? [];
-      const legendAttrIdForMethod = self.attributeID("legend");
+      const values = self.numericValuesForAttrRole("legend") ?? []
+      const legendAttrIdForMethod = self.attributeID("legend")
       switch (partitionMethod) {
         case "quantize": {
-          const extents = extent(values);
+          const extents = extent(values)
           // Only call scaleQuantize if extents are valid numbers
           if (typeof extents[0] !== 'number' || typeof extents[1] !== 'number' || isNaN(extents[0]) || isNaN(extents[1])) {
-            return scaleQuantize([], self.choroplethColors);
+            return scaleQuantize([], self.choroplethColors)
           }
-          return scaleQuantize(extents, self.choroplethColors);
+          return scaleQuantize(extents, self.choroplethColors)
         }
         case "quantile":
         default:
-          return scaleQuantile(values, self.choroplethColors);
+          return scaleQuantile(values, self.choroplethColors)
       }
     },
     get legendNumericColorScale() {
       // Use the binning type from metadata for backward compatibility
-      const legendAttrIdForGetter = self.attributeID("legend");
-      const binningTypeForGetter = self.metadata?.getAttributeBinningType(legendAttrIdForGetter);
-      return this.getLegendNumericColorScale(binningTypeForGetter === 'quantize' ? 'quantize' : 'quantile');
+      const legendAttrIdForGetter = self.attributeID("legend")
+      const binningTypeForGetter = self.metadata?.getAttributeBinningType(legendAttrIdForGetter)
+      return this.getLegendNumericColorScale(binningTypeForGetter === 'quantize' ? 'quantize' : 'quantile')
     },
   }))
   .views(self => (
@@ -605,7 +605,7 @@ export const DataConfigurationModel = types
       getCasesForLegendBin(bin: number, partitionMethod?: 'quantile' | 'quantize'): string[] {
         const scale = partitionMethod
           ? self.getLegendNumericColorScale(partitionMethod)
-          : self.legendNumericColorScale;
+          : self.legendNumericColorScale
         const thresholds = getScaleThresholds(scale)
         const min = bin === 0 ? -Infinity : thresholds[bin - 1]
         const max = bin === thresholds.length ? Infinity : thresholds[bin]

@@ -8,11 +8,11 @@ exports.halfPi = Math.PI / 2;
 exports.quarterPi = Math.PI / 4;
 // max - min should equal two pi
 function normalizeRadian(_radian, min, max) {
-    var radian = _radian;
+    let radian = _radian;
     while (radian < min)
-        radian += exports.twoPi;
+        {radian += exports.twoPi;}
     while (radian >= max)
-        radian -= exports.twoPi;
+        {radian -= exports.twoPi;}
     return radian;
 }
 // Returns the equivalent radian between 0 and two pi.

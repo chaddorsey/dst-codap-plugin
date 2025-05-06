@@ -1,21 +1,21 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+let __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+let __generator = (this && this.__generator) || function (thisArg, body) {
+    let _ = { label: 0, sent() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g.throw = verb(1), g.return = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        while (g && (g = 0, op[0] && (_ = 0)), _) {try {
+            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
@@ -31,7 +31,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     _.trys.pop(); continue;
             }
             op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }}
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
@@ -47,12 +47,12 @@ exports.checkGapDateRange = checkGapDateRange;
 exports.updateMapBoundsFromData = updateMapBoundsFromData;
 exports.analyzeGapPeriodCoordinates = analyzeGapPeriodCoordinates;
 exports.focusOnGapPeriodData = focusOnGapPeriodData;
-var codap_plugin_api_1 = require("@concord-consortium/codap-plugin-api");
-var dataset_config_1 = require("../models/dataset-config");
-var codap_data_1 = require("../models/codap-data");
-var graph_1 = require("../models/graph");
-var codap_utils_1 = require("./codap-utils");
-var date_utils_1 = require("./date-utils");
+let codap_plugin_api_1 = require("@concord-consortium/codap-plugin-api");
+let dataset_config_1 = require("../models/dataset-config");
+let codap_data_1 = require("../models/codap-data");
+let graph_1 = require("../models/graph");
+let codap_utils_1 = require("./codap-utils");
+let date_utils_1 = require("./date-utils");
 /**
  * Parse a date string using the specified format
  * @param dateStr The date string to parse
@@ -63,11 +63,11 @@ function parseDate(dateStr, format) {
     try {
         // If we have a specific format, use it with the existing parseDate function
         if (format) {
-            var parsedDateResult = (0, date_utils_1.parseDateWithFormat)(dateStr, format);
+            let parsedDateResult = (0, date_utils_1.parseDateWithFormat)(dateStr, format);
             return parsedDateResult;
         }
         // Otherwise analyze the date string
-        var analysis = (0, date_utils_1.analyzeDateString)(dateStr);
+        let analysis = (0, date_utils_1.analyzeDateString)(dateStr);
         if (analysis.isValid && analysis.parsed) {
             return analysis.parsed.getTime();
         }
@@ -90,8 +90,8 @@ function extractAttributesFromContext(dataContextResult) {
         if (!(dataContextResult === null || dataContextResult === void 0 ? void 0 : dataContextResult.success) || !(dataContextResult === null || dataContextResult === void 0 ? void 0 : dataContextResult.values)) {
             return [];
         }
-        var context = dataContextResult.values;
-        var attributes_1 = [];
+        let context = dataContextResult.values;
+        let attributes_1 = [];
         // Extract from collections if they exist in the context
         if (context.collections && Array.isArray(context.collections)) {
             // Iterate through each collection
@@ -99,7 +99,7 @@ function extractAttributesFromContext(dataContextResult) {
                 // Check if collection has attributes
                 if (collection.attrs && Array.isArray(collection.attrs)) {
                     // Extract attribute names
-                    var collectionAttrs = collection.attrs
+                    let collectionAttrs = collection.attrs
                         .filter(function (attr) { return attr && attr.name; })
                         .map(function (attr) { return attr.name; });
                     attributes_1.push.apply(attributes_1, collectionAttrs);
@@ -121,7 +121,7 @@ function extractAttributesFromContext(dataContextResult) {
  */
 function getDatasetAttributes(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
-        var contextResult, attributesFromContext, collectionsResult, allAttrsResult, attributeNames, allAttributes, _i, _a, collection, attrResult, collectionAttributes, error_1;
+        let contextResult, attributesFromContext, collectionsResult, allAttrsResult, attributeNames, allAttributes, _i, _a, collection, attrResult, collectionAttributes, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -210,7 +210,7 @@ function getDatasetAttributes(dataContextName) {
  */
 function loadConfiguredData() {
     return __awaiter(this, void 0, void 0, function () {
-        var error_2;
+        let error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -261,7 +261,7 @@ function loadConfiguredData() {
  */
 function getMinMaxFromItems(dataContextName, attributeName) {
     return __awaiter(this, void 0, void 0, function () {
-        var itemsResult, min, max, valuesFound, _i, _a, item, value, error_3;
+        let itemsResult, min, max, valuesFound, _i, _a, item, value, error_3;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -302,15 +302,15 @@ function getMinMaxFromItems(dataContextName, attributeName) {
                             // Only process numeric values
                             if (typeof value === "number" && !isNaN(value)) {
                                 if (min === null || value < min)
-                                    min = value;
+                                    {min = value;}
                                 if (max === null || value > max)
-                                    max = value;
+                                    {max = value;}
                                 valuesFound++;
                             }
                         }
                     }
                     console.log("Found ".concat(valuesFound, " numeric values for ").concat(attributeName, ", min: ").concat(min, ", max: ").concat(max));
-                    return [2 /*return*/, { min: min, max: max }];
+                    return [2 /*return*/, { min, max }];
                 case 2:
                     error_3 = _b.sent();
                     console.error("Error getting min/max for ".concat(attributeName, ":"), error_3);
@@ -327,7 +327,7 @@ function getMinMaxFromItems(dataContextName, attributeName) {
 function updateDateRangeFromData(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
         var dateAttr_1, minDate, maxDate, hasValidDates, dateSummaryResult, minDateValue, maxDateValue, parsedDate, parsedDate, dateAttrResult, minDateValue, maxDateValue, parsedDate, parsedDate, collectionResult, dateAttribute, minDateValue, maxDateValue, parsedDate, parsedDate, dateValues, referenceDate, tableResult, tableMinDate, tableMaxDate, foundDates, _i, _a, row, dateValue, timestamp, referenceDate, minDateResult, maxDateResult, dateCase, dateValue, timestamp, referenceDate, dateCase, dateValue, timestamp, referenceDate, error_4, casesResult, casesMinDate, casesMaxDate, foundDates, _b, _c, caseData, dateValue, timestamp, referenceDate, error_5, buffer, error_6;
-        var _d, _e;
+        let _d, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
@@ -377,7 +377,7 @@ function updateDateRangeFromData(dataContextName) {
                     else {
                         console.warn("Failed to get date summary statistics");
                     }
-                    if (!!hasValidDates) return [3 /*break*/, 3];
+                    if (hasValidDates) return [3 /*break*/, 3];
                     console.log("Trying to get attribute details directly...");
                     return [4 /*yield*/, codap_plugin_api_1.codapInterface.sendRequest({
                             action: "get",
@@ -411,7 +411,7 @@ function updateDateRangeFromData(dataContextName) {
                     }
                     _f.label = 3;
                 case 3:
-                    if (!!hasValidDates) return [3 /*break*/, 5];
+                    if (hasValidDates) return [3 /*break*/, 5];
                     console.log("Trying to get date range from collection stats...");
                     return [4 /*yield*/, codap_plugin_api_1.codapInterface.sendRequest({
                             action: "get",
@@ -453,7 +453,7 @@ function updateDateRangeFromData(dataContextName) {
                     }
                     _f.label = 5;
                 case 5:
-                    if (!!hasValidDates) return [3 /*break*/, 9];
+                    if (hasValidDates) return [3 /*break*/, 9];
                     console.log("Trying to extract date range directly from items...");
                     return [4 /*yield*/, getMinMaxFromItems(dataContextName, dateAttr_1)];
                 case 6:
@@ -484,7 +484,7 @@ function updateDateRangeFromData(dataContextName) {
                     }
                     _f.label = 9;
                 case 9:
-                    if (!!hasValidDates) return [3 /*break*/, 11];
+                    if (hasValidDates) return [3 /*break*/, 11];
                     console.log("Trying to extract date range from table data...");
                     return [4 /*yield*/, codap_plugin_api_1.codapInterface.sendRequest({
                             action: "get",
@@ -551,7 +551,7 @@ function updateDateRangeFromData(dataContextName) {
                     }
                     _f.label = 11;
                 case 11:
-                    if (!!hasValidDates) return [3 /*break*/, 16];
+                    if (hasValidDates) return [3 /*break*/, 16];
                     console.log("Trying to get date range using formula search...");
                     _f.label = 12;
                 case 12:
@@ -649,7 +649,7 @@ function updateDateRangeFromData(dataContextName) {
                     console.error("Error using formula search for dates:", error_4);
                     return [3 /*break*/, 16];
                 case 16:
-                    if (!!hasValidDates) return [3 /*break*/, 20];
+                    if (hasValidDates) return [3 /*break*/, 20];
                     console.log("Trying to access date range from cases endpoint directly...");
                     _f.label = 17;
                 case 17:
@@ -746,7 +746,7 @@ function updateDateRangeFromData(dataContextName) {
  */
 function getDatasetDetails(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
-        var contextResult, collectionsResult, collections, collectionsWithAttributes, _i, collections_1, collection, attrResult, error_7;
+        let contextResult, collectionsResult, collections, collectionsWithAttributes, _i, collections_1, collection, attrResult, error_7;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -904,7 +904,7 @@ function exploreDataset(dataContextName) {
  */
 function getAttributesFromItemSearch(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
-        var itemSearchResult, _i, _a, item, itemValueAttrs, itemKeyAttrs, error_10;
+        let itemSearchResult, _i, _a, item, itemValueAttrs, itemKeyAttrs, error_10;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -957,7 +957,7 @@ function getAttributesFromItemSearch(dataContextName) {
 function analyzeDateFormats(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
         var result, formatCategories, sampleValues, dateAttributeId, stats, _i, _a, caseData, rawValue, stringValue, analysis, month, year, _b, _c, _d, format, caseIds, _e, _f, _g, format, samples, sortedYears, _h, sortedYears_1, year, sortedMonths, monthsToShow, _j, monthsToShow_1, month, validDates, _k, _l, caseData, date, gapThreshold, lastDate, gapsFound, i, currentDate, gap, error_11;
-        var _m;
+        let _m;
         return __generator(this, function (_o) {
             switch (_o.label) {
                 case 0:
@@ -995,14 +995,14 @@ function analyzeDateFormats(dataContextName) {
                     for (_i = 0, _a = result.values; _i < _a.length; _i++) {
                         caseData = _a[_i];
                         if (!caseData)
-                            continue;
+                            {continue;}
                         stats.total++;
                         rawValue = dateAttributeId
                             ? codap_data_1.codapData.dataSet.getValue(caseData.id, dateAttributeId)
                             : undefined;
                         if (rawValue === undefined || rawValue === null || rawValue === "") {
                             if (!formatCategories.empty)
-                                formatCategories.empty = [];
+                                {formatCategories.empty = [];}
                             formatCategories.empty.push(caseData.id);
                             stats.failed++;
                             continue;
@@ -1023,7 +1023,7 @@ function analyzeDateFormats(dataContextName) {
                             sampleValues[analysis.format].push({
                                 raw: stringValue,
                                 parsed: analysis.parsed,
-                                analysis: analysis
+                                analysis
                             });
                         }
                         // Gather stats for parsed dates
@@ -1053,7 +1053,7 @@ function analyzeDateFormats(dataContextName) {
                         if (samples.length > 0) {
                             console.log("  ".concat(format, ":"));
                             samples.forEach(function (sample) {
-                                var dateStr = sample.parsed && !isNaN(sample.parsed.getTime())
+                                let dateStr = sample.parsed && !isNaN(sample.parsed.getTime())
                                     ? sample.parsed.toISOString()
                                     : "Invalid Date";
                                 console.log("    \"".concat(sample.raw, "\" => ").concat(dateStr, " (").concat(sample.analysis.formatDetails, ")"));
@@ -1081,7 +1081,7 @@ function analyzeDateFormats(dataContextName) {
                     for (_k = 0, _l = result.values; _k < _l.length; _k++) {
                         caseData = _l[_k];
                         if (!caseData)
-                            continue;
+                            {continue;}
                         date = codap_data_1.codapData.getCaseDate(caseData.id);
                         if (date && isFinite(date)) {
                             validDates.push(date);
@@ -1158,13 +1158,13 @@ function checkGapDateRange(dataContextName) {
                     for (_i = 0, _a = result.values; _i < _a.length; _i++) {
                         caseData = _a[_i];
                         if (!caseData)
-                            continue;
+                            {continue;}
                         date = codap_data_1.codapData.getCaseDate(caseData.id);
                         if (!date || !isFinite(date))
-                            continue;
+                            {continue;}
                         dateObj = {
                             id: caseData.id,
-                            date: date,
+                            date,
                             dateStr: new Date(date).toISOString()
                         };
                         allDates.push(dateObj);
@@ -1218,9 +1218,9 @@ function checkGapDateRange(dataContextName) {
                     }
                     monthCounts_1 = {};
                     allDates.forEach(function (dateObj) {
-                        var date = new Date(dateObj.date);
+                        let date = new Date(dateObj.date);
                         if (date.getFullYear() === 2005) {
-                            var monthKey = date.getMonth() + 1; // 1-12 for Jan-Dec
+                            let monthKey = date.getMonth() + 1; // 1-12 for Jan-Dec
                             monthCounts_1[monthKey] = (monthCounts_1[monthKey] || 0) + 1;
                         }
                     });
@@ -1252,11 +1252,11 @@ function updateMapBoundsFromData(dataContextName) {
                 console.log("Failed to get result for ".concat(attrName));
                 return null;
             }
-            var values = caseResult.values;
+            let values = caseResult.values;
             // Handle different response formats
             if (Array.isArray(values) && values.length > 0) {
                 // Format: { values: [ { values: { attr: value } } ] }
-                var caseData = values[0];
+                let caseData = values[0];
                 var value = null;
                 // Check in values object
                 if (caseData.values && caseData.values[attrName] !== undefined) {
@@ -1276,14 +1276,14 @@ function updateMapBoundsFromData(dataContextName) {
             // Format: { values: { attrName: value } }
             else if (values && typeof values === "object" && values[attrName] !== undefined) {
                 var value = values[attrName];
-                var numValue = typeof value === "string" ? Number(value) : value;
+                let numValue = typeof value === "string" ? Number(value) : value;
                 console.log("Extracted ".concat(attrName, " value from direct object:"), numValue);
                 return typeof numValue === "number" && !isNaN(numValue) ? numValue : null;
             }
             console.log("Could not extract ".concat(attrName, " from result"), caseResult);
             return null;
         }
-        var latAttr, longAttr, collectionName, collectionsResult, casesCollection, error_13, minLatResult, maxLatResult, minLongResult, maxLongResult, minLat, maxLat, minLong, maxLong, hasValidCoordinates, absoluteMinLat, absoluteMaxLat, absoluteMinLong, absoluteMaxLong, visibleMinLat, visibleMaxLat, visibleMinLong, visibleMaxLong, dataCenterLat, dataCenterLong, dataLatSpan, dataLongSpan, dataMinLat_1, dataMaxLat_1, dataMinLong_1, dataMaxLong_1, error_14;
+        let latAttr, longAttr, collectionName, collectionsResult, casesCollection, error_13, minLatResult, maxLatResult, minLongResult, maxLongResult, minLat, maxLat, minLong, maxLong, hasValidCoordinates, absoluteMinLat, absoluteMaxLat, absoluteMinLong, absoluteMaxLong, visibleMinLat, visibleMaxLat, visibleMinLong, visibleMaxLong, dataCenterLat, dataCenterLong, dataLatSpan, dataLongSpan, dataMinLat_1, dataMaxLat_1, dataMinLong_1, dataMaxLong_1, error_14;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -1464,10 +1464,10 @@ function analyzeGapPeriodCoordinates(dataContextName) {
                     for (_i = 0, _a = result.values; _i < _a.length; _i++) {
                         caseData = _a[_i];
                         if (!caseData)
-                            continue;
+                            {continue;}
                         dateValue = codap_data_1.codapData.getCaseDate(caseData.id);
                         if (!dateValue || !isFinite(dateValue))
-                            continue;
+                            {continue;}
                         date = new Date(dateValue);
                         // Check if the date is in the gap period
                         if (dateValue >= gapStart && dateValue <= gapEnd) {
@@ -1476,9 +1476,9 @@ function analyzeGapPeriodCoordinates(dataContextName) {
                             if (latitude !== undefined && longitude !== undefined) {
                                 gapCases.push({
                                     id: caseData.id,
-                                    date: date,
-                                    latitude: latitude,
-                                    longitude: longitude
+                                    date,
+                                    latitude,
+                                    longitude
                                 });
                             }
                         }
@@ -1536,7 +1536,7 @@ function analyzeGapPeriodCoordinates(dataContextName) {
  */
 function focusOnGapPeriodData(dataContextName) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, gapStart, gapEnd, gapPointsFound, minLat, maxLat, minLong, maxLong, _i, _a, caseData, dateValue, latitude, longitude, latRange, longRange, expandedMinLat, expandedMaxLat, expandedMinLong, expandedMaxLong, error_16;
+        let result, gapStart, gapEnd, gapPointsFound, minLat, maxLat, minLong, maxLong, _i, _a, caseData, dateValue, latitude, longitude, latRange, longRange, expandedMinLat, expandedMaxLat, expandedMinLong, expandedMaxLong, error_16;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -1562,10 +1562,10 @@ function focusOnGapPeriodData(dataContextName) {
                     for (_i = 0, _a = result.values; _i < _a.length; _i++) {
                         caseData = _a[_i];
                         if (!caseData)
-                            continue;
+                            {continue;}
                         dateValue = codap_data_1.codapData.getCaseDate(caseData.id);
                         if (!dateValue || !isFinite(dateValue))
-                            continue;
+                            {continue;}
                         // Check if the date is in the gap period
                         if (dateValue >= gapStart && dateValue <= gapEnd) {
                             latitude = codap_data_1.codapData.getLatitude(caseData.id);
@@ -1584,7 +1584,7 @@ function focusOnGapPeriodData(dataContextName) {
                         console.warn("No geographic points found in the gap period to focus on");
                         return [2 /*return*/];
                     }
-                    console.log("Found gap period geographic bounds:", { minLat: minLat, maxLat: maxLat, minLong: minLong, maxLong: maxLong });
+                    console.log("Found gap period geographic bounds:", { minLat, maxLat, minLong, maxLong });
                     latRange = maxLat - minLat;
                     longRange = maxLong - minLong;
                     expandedMinLat = minLat - latRange;

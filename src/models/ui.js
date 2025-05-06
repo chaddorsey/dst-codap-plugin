@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ui = void 0;
-var mobx_1 = require("mobx");
-var UI = /** @class */ (function () {
+let mobx_1 = require("mobx");
+let UI = /** @class */ (function () {
     function UI() {
         // The name of the orbit controls currently being used.
         // This prevents other orbit controls from updating the camera position.

@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 /*
   The Attribute model is part of the data model originally designed for CLUE updated for CODAP 3,
   which represents a "column" of data. It is a MobX State Tree model in which the metadata
@@ -28,50 +28,50 @@
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
+            s = arguments[i]
+            for (let p in s) {if (Object.prototype.hasOwnProperty.call(s, p))
+                {t[p] = s[p]}}
         }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
+        return t
     }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Attribute = void 0;
-exports.isFormulaAttr = isFormulaAttr;
-exports.isValidFormulaAttr = isValidFormulaAttr;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var codap_utils_1 = require("../../utilities/codap-utils");
-var color_utils_1 = require("../../utilities/color-utils");
-var date_parser_1 = require("../../utilities/date-parser");
-var date_utils_1 = require("../../utilities/date-utils");
-var mst_utils_1 = require("../../utilities/mst-utils");
-var boundary_types_1 = require("../boundaries/boundary-types");
-var formula_1 = require("../formula/formula");
-var apply_model_change_1 = require("../history/apply-model-change");
-var without_undo_1 = require("../history/without-undo");
-var attribute_types_1 = require("./attribute-types");
-var v2_model_1 = require("./v2-model");
+    return __assign.apply(this, arguments)
+}
+let __rest = (this && this.__rest) || function (s, e) {
+    let t = {}
+    for (var p in s) {if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        {t[p] = s[p]}}
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        {for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                {t[p[i]] = s[p[i]]}
+        }}
+    return t
+}
+let __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) {for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i)
+            ar[i] = from[i]
+        }
+    }}
+    return to.concat(ar || Array.prototype.slice.call(from))
+}
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.Attribute = void 0
+exports.isFormulaAttr = isFormulaAttr
+exports.isValidFormulaAttr = isValidFormulaAttr
+let mobx_state_tree_1 = require("mobx-state-tree")
+let codap_utils_1 = require("../../utilities/codap-utils")
+let color_utils_1 = require("../../utilities/color-utils")
+let date_parser_1 = require("../../utilities/date-parser")
+let date_utils_1 = require("../../utilities/date-utils")
+let mst_utils_1 = require("../../utilities/mst-utils")
+let boundary_types_1 = require("../boundaries/boundary-types")
+let formula_1 = require("../formula/formula")
+let apply_model_change_1 = require("../history/apply-model-change")
+let without_undo_1 = require("../history/without-undo")
+let attribute_types_1 = require("./attribute-types")
+let v2_model_1 = require("./v2-model")
 exports.Attribute = v2_model_1.V2Model.named("Attribute").props({
     id: (0, codap_utils_1.typeV3Id)(codap_utils_1.kAttrIdPrefix),
     _cid: mobx_state_tree_1.types.maybe(mobx_state_tree_1.types.string), // cid was a v2 property that is used by some plugins (Collaborative)
@@ -92,341 +92,341 @@ exports.Attribute = v2_model_1.V2Model.named("Attribute").props({
     values: mobx_state_tree_1.types.maybe(mobx_state_tree_1.types.frozen())
 })
     .preProcessSnapshot(function (snapshot) {
-    var _a, _b;
-    var inFormula = snapshot.formula, inValues = snapshot.values, others = __rest(snapshot
+    let _a, _b
+    let inFormula = snapshot.formula, inValues = snapshot.values, others = __rest(snapshot
     // early development versions of v3 had a `title` property
-    , ["formula", "values"]);
+    , ["formula", "values"])
     // early development versions of v3 had a `title` property
-    var _title = (_a = snapshot._title) !== null && _a !== void 0 ? _a : (snapshot.title || undefined);
+    let _title = (_a = snapshot._title) !== null && _a !== void 0 ? _a : (snapshot.title || undefined)
     // don't import empty formulas
-    var formula = ((_b = inFormula === null || inFormula === void 0 ? void 0 : inFormula.display) === null || _b === void 0 ? void 0 : _b.length) ? inFormula : undefined;
+    let formula = ((_b = inFormula === null || inFormula === void 0 ? void 0 : inFormula.display) === null || _b === void 0 ? void 0 : _b.length) ? inFormula : undefined
     // map all non-string values to strings
-    var values = (inValues || []).map(function (v) { return (0, attribute_types_1.importValueToString)(v); });
-    return __assign(__assign({ formula: formula, values: values }, others), { _title: _title });
+    let values = (inValues || []).map(function (v) { return (0, attribute_types_1.importValueToString)(v) })
+    return {formula, values, ...others, _title}
 })
     .volatile(function (self) { return ({
     strValues: [],
     numValues: [],
     changeCount: 0
-}); })
+}) })
     .views(function (self) {
-    var baseMatchNameOrId = self.matchNameOrId;
+    let baseMatchNameOrId = self.matchNameOrId
     return {
-        matchNameOrId: function (nameOrId) {
-            return self.id === nameOrId || baseMatchNameOrId(nameOrId);
+        matchNameOrId (nameOrId) {
+            return self.id === nameOrId || baseMatchNameOrId(nameOrId)
         }
-    };
+    }
 })
     .views(function (self) { return ({
-    importValue: function (value) {
+    importValue (value) {
         // may eventually want to do something more sophisticated here, like convert
         // numeric values using an attribute-specific number of decimal places
-        return (0, attribute_types_1.importValueToString)(value);
+        return (0, attribute_types_1.importValueToString)(value)
     },
-    toNumeric: function (value) {
+    toNumeric (value) {
         if (value == null || value === "")
-            return NaN;
-        return Number(value);
+            {return NaN}
+        return Number(value)
     },
     get numPrecision() {
-        return typeof self.precision === "number" ? self.precision : undefined;
+        return typeof self.precision === "number" ? self.precision : undefined
     },
     get datePrecision() {
-        return typeof self.precision === "string" ? self.precision : undefined;
+        return typeof self.precision === "string" ? self.precision : undefined
     },
     getEmptyCount: (0, mst_utils_1.cachedFnFactory)(function () {
         // Note that `self.changeCount` is absolutely not necessary here. However, historically, this function used to be
         // a MobX computed property, and `self.changeCount` was used to invalidate the cache. Also, there are tests
         // (and possibly some features?) that depend on MobX reactivity. Hence, this is left here for now.
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
-        return self.strValues.reduce(function (prev, current) { return current === "" ? ++prev : prev; }, 0);
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return self.strValues.reduce(function (prev, current) { return current === "" ? ++prev : prev }, 0)
     }),
     getNumericCount: (0, mst_utils_1.cachedFnFactory)(function () {
         // Note that `self.changeCount` is absolutely not necessary here. However, historically, this function used to be
         // a MobX computed property, and `self.changeCount` was used to invalidate the cache. Also, there are tests
         // (and possibly some features?) that depend on MobX reactivity. Hence, this is left here for now.
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
-        return self.numValues.reduce(function (prev, current) { return isFinite(current) ? ++prev : prev; }, 0);
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return self.numValues.reduce(function (prev, current) { return isFinite(current) ? ++prev : prev }, 0)
     }),
     getStrictColorCount: (0, mst_utils_1.cachedFnFactory)(function () {
         // Note that `self.changeCount` is absolutely not necessary here. However, historically, this function used to be
         // a MobX computed property, and `self.changeCount` was used to invalidate the cache. Also, there are tests
         // (and possibly some features?) that depend on MobX reactivity. Hence, this is left here for now.
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
-        return self.strValues.reduce(function (prev, current) { return (0, color_utils_1.parseColor)(current) ? ++prev : prev; }, 0);
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return self.strValues.reduce(function (prev, current) { return (0, color_utils_1.parseColor)(current) ? ++prev : prev }, 0)
     }),
     getDateCount: (0, mst_utils_1.cachedFnFactory)(function () {
         // Note that `self.changeCount` is absolutely not necessary here. However, historically, this function used to be
         // a MobX computed property, and `self.changeCount` was used to invalidate the cache. Also, there are tests
         // (and possibly some features?) that depend on MobX reactivity. Hence, this is left here for now.
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
-        return self.strValues.reduce(function (prev, current) { return (0, date_parser_1.isDateString)(current) ? ++prev : prev; }, 0);
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return self.strValues.reduce(function (prev, current) { return (0, date_parser_1.isDateString)(current) ? ++prev : prev }, 0)
     }),
     getBoundaryCount: (0, mst_utils_1.cachedFnFactory)(function () {
-        return self.strValues.reduce(function (prev, current) { return (0, boundary_types_1.isBoundaryValue)(current) ? ++prev : prev; }, 0);
+        return self.strValues.reduce(function (prev, current) { return (0, boundary_types_1.isBoundaryValue)(current) ? ++prev : prev }, 0)
     }),
     get hasFormula() {
-        return !!self.formula && !self.formula.empty;
+        return !!self.formula && !self.formula.empty
     },
     get hasValidFormula() {
-        var _a;
-        return !!((_a = self.formula) === null || _a === void 0 ? void 0 : _a.valid);
+        let _a
+        return !!((_a = self.formula) === null || _a === void 0 ? void 0 : _a.valid)
     },
     get shouldSerializeValues() {
-        return !this.hasFormula;
+        return !this.hasFormula
     },
     get cid() {
-        var _a;
-        return (_a = self._cid) !== null && _a !== void 0 ? _a : self.id;
+        let _a
+        return (_a = self._cid) !== null && _a !== void 0 ? _a : self.id
     }
-}); })
+}) })
     .actions(function (self) { return ({
-    incChangeCount: function () {
-        ++self.changeCount;
-        self.getEmptyCount.invalidate();
-        self.getNumericCount.invalidate();
-        self.getStrictColorCount.invalidate();
-        self.getBoundaryCount.invalidate();
-        self.getDateCount.invalidate();
+    incChangeCount () {
+        ++self.changeCount
+        self.getEmptyCount.invalidate()
+        self.getNumericCount.invalidate()
+        self.getStrictColorCount.invalidate()
+        self.getBoundaryCount.invalidate()
+        self.getDateCount.invalidate()
     },
-    setCid: function (cid) {
-        self._cid = cid;
+    setCid (cid) {
+        self._cid = cid
     }
-}); })
+}) })
     .actions(function (self) { return ({
-    afterCreate: function () {
+    afterCreate () {
         // frozen properties are not modifiable in development (because MST freezes them with Object.freeze),
         // so we copy the data to volatile properties during runtime. Clients must call prepareSnapshot() before
         // and completeSnapshot() after serialization for this to work under these conditions. MST doesn't
         // actually freeze the values in production, so prepareSnapshot()/completeSnapshot() are NOPs in production.
         if ((0, attribute_types_1.isDevelopment)()) {
             // copy the frozen values into volatile `strValues`
-            self.strValues = __spreadArray([], (self.values || []), true);
+            self.strValues = __spreadArray([], (self.values || []), true)
             // clear frozen `values` so clients aren't tempted to access them and
             // so we're not maintaining a triplicate copy of the data in memory.
-            self.values = undefined;
+            self.values = undefined
         }
         else {
             // in production mode, `strValues` can share the `values` array since it isn't frozen
             if (!self.values)
-                self.values = [];
-            self.strValues = self.values;
+                {self.values = []}
+            self.strValues = self.values
         }
         // cache the numeric conversion of each value in volatile `numValues`
-        self.numValues = self.strValues.map(function (v) { return self.toNumeric(v); });
+        self.numValues = self.strValues.map(function (v) { return self.toNumeric(v) })
     },
     // should be called before retrieving snapshot (i.e. before serialization)
-    prepareSnapshot: function () {
+    prepareSnapshot () {
         if ((0, attribute_types_1.isDevelopment)() && self.shouldSerializeValues) {
             // In development, values is undefined (see .afterCreate()). If the attribute values should be serialized
             // (no formula), we need to temporarily update it to the current values.
-            (0, without_undo_1.withoutUndo)({ suppressWarning: true });
-            self.values = __spreadArray([], self.strValues, true);
+            (0, without_undo_1.withoutUndo)({ suppressWarning: true })
+            self.values = __spreadArray([], self.strValues, true)
         }
         if ((0, attribute_types_1.isProduction)() && !self.shouldSerializeValues) {
             // In development, values is set to the volatile strValues (see .afterCreate()). If the attribute values should
             // NOT be serialized (non-empty formula) we need to temporarily set it to undefined.
-            (0, without_undo_1.withoutUndo)({ suppressWarning: true });
-            self.values = undefined;
+            (0, without_undo_1.withoutUndo)({ suppressWarning: true })
+            self.values = undefined
         }
     },
     // should be called after retrieving snapshot (i.e. after serialization)
-    completeSnapshot: function () {
+    completeSnapshot () {
         if ((0, attribute_types_1.isDevelopment)() && self.shouldSerializeValues) {
             // values should be set back to undefined in development mode.
-            (0, without_undo_1.withoutUndo)({ suppressWarning: true });
-            self.values = undefined;
+            (0, without_undo_1.withoutUndo)({ suppressWarning: true })
+            self.values = undefined
         }
         if ((0, attribute_types_1.isProduction)() && !self.shouldSerializeValues) {
             // values should be set back to the volatile strValues in production mode.
-            (0, without_undo_1.withoutUndo)({ suppressWarning: true });
-            self.values = self.strValues;
+            (0, without_undo_1.withoutUndo)({ suppressWarning: true })
+            self.values = self.strValues
         }
     }
-}); })
+}) })
     .views(function (self) { return ({
     get length() {
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
-        return self.strValues.length;
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return self.strValues.length
     },
     get type() {
         if (self.userType)
-            return self.userType;
-        self.changeCount; // eslint-disable-line @typescript-eslint/no-unused-expressions
+            {return self.userType}
+        self.changeCount // eslint-disable-line @typescript-eslint/no-unused-expressions
         if (this.length === 0)
-            return;
+            {return}
         // only infer color if all non-empty values are strict colors
-        var colorCount = self.getStrictColorCount();
+        let colorCount = self.getStrictColorCount()
         if (colorCount > 0 && colorCount === this.length - self.getEmptyCount())
-            return "color";
+            {return "color"}
         // only infer numeric if all non-empty values are numeric (CODAP2)
-        var numCount = self.getNumericCount();
+        let numCount = self.getNumericCount()
         if (numCount > 0 && numCount === this.length - self.getEmptyCount())
-            return "numeric";
+            {return "numeric"}
         // only infer date if all non-empty values are dates
-        var dateCount = self.getDateCount();
+        let dateCount = self.getDateCount()
         if (dateCount > 0 && dateCount === this.length - self.getEmptyCount())
-            return "date";
+            {return "date"}
         // only infer boundary if all non-empty values are boundaries or if the attribute has a special name
-        var boundaryCount = self.getBoundaryCount();
-        var allValuesAreBoundaries = boundaryCount > 0 && boundaryCount === this.length - self.getEmptyCount();
+        let boundaryCount = self.getBoundaryCount()
+        let allValuesAreBoundaries = boundaryCount > 0 && boundaryCount === this.length - self.getEmptyCount()
         if (boundary_types_1.kPolygonNames.includes(self.title) || allValuesAreBoundaries) {
-            return "boundary";
+            return "boundary"
         }
-        return "categorical";
+        return "categorical"
     },
     get isEditable() {
-        return self.editable && !self.hasFormula;
+        return self.editable && !self.hasFormula
     },
-    value: function (index) {
-        var numValue = self.numValues[index];
-        return !isNaN(numValue) ? numValue : self.strValues[index];
+    value (index) {
+        let numValue = self.numValues[index]
+        return !isNaN(numValue) ? numValue : self.strValues[index]
     },
-    isNumeric: function (index) {
-        return !isNaN(self.numValues[index]);
+    isNumeric (index) {
+        return !isNaN(self.numValues[index])
     },
-    numValue: function (index) {
-        return self.numValues[index];
+    numValue (index) {
+        return self.numValues[index]
     },
-    strValue: function (index) {
-        return self.strValues[index];
+    strValue (index) {
+        return self.strValues[index]
     },
-    boolean: function (index) {
+    boolean (index) {
         return ["true", "yes"].includes(self.strValues[index].toLowerCase()) ||
-            (!isNaN(this.numValue(index)) ? this.numValue(index) !== 0 : false);
+            (!isNaN(this.numValue(index)) ? this.numValue(index) !== 0 : false)
     },
-    derive: function (name) {
-        return { id: self.id, name: name || self.name, values: [] };
+    derive (name) {
+        return { id: self.id, name: name || self.name, values: [] }
     }
-}); })
+}) })
     .actions(function (self) { return ({
-    setName: function (newName) {
-        self.name = newName.trim();
+    setName (newName) {
+        self.name = newName.trim()
     },
-    setUnits: function (units) {
-        self.units = units;
+    setUnits (units) {
+        self.units = units
     },
-    setDescription: function (description) {
-        self.description = description;
+    setDescription (description) {
+        self.description = description
     },
-    setUserType: function (type) {
-        self.userType = type;
+    setUserType (type) {
+        self.userType = type
     },
     // setUserFormat(precision: string) {
     //   self.userFormat = `.${precision}~f`
     // },
-    setPrecision: function (precision) {
-        self.precision = precision;
+    setPrecision (precision) {
+        self.precision = precision
     },
-    setDeleteable: function (deleteable) {
-        self.deleteable = deleteable;
+    setDeleteable (deleteable) {
+        self.deleteable = deleteable
     },
-    setEditable: function (editable) {
-        self.editable = editable;
+    setEditable (editable) {
+        self.editable = editable
     },
-    clearFormula: function () {
-        self.formula = undefined;
+    clearFormula () {
+        self.formula = undefined
     },
-    setDisplayExpression: function (displayFormula) {
+    setDisplayExpression (displayFormula) {
         if (displayFormula) {
             if (!self.formula) {
-                self.formula = formula_1.Formula.create({ display: displayFormula });
+                self.formula = formula_1.Formula.create({ display: displayFormula })
             }
             else {
-                self.formula.setDisplayExpression(displayFormula);
+                self.formula.setDisplayExpression(displayFormula)
             }
         }
         else {
-            this.clearFormula();
+            this.clearFormula()
         }
     },
-    addValue: function (value, beforeIndex) {
-        if (value === void 0) { value = ""; }
-        var strValue = self.importValue(value);
-        var numValue = self.toNumeric(strValue);
+    addValue (value, beforeIndex) {
+        if (value === void 0) { value = "" }
+        let strValue = self.importValue(value)
+        let numValue = self.toNumeric(strValue)
         if ((beforeIndex != null) && (beforeIndex < self.strValues.length)) {
-            self.strValues.splice(beforeIndex, 0, strValue);
-            self.numValues.splice(beforeIndex, 0, numValue);
+            self.strValues.splice(beforeIndex, 0, strValue)
+            self.numValues.splice(beforeIndex, 0, numValue)
         }
         else {
-            self.strValues.push(strValue);
-            self.numValues.push(numValue);
+            self.strValues.push(strValue)
+            self.numValues.push(numValue)
         }
-        self.incChangeCount();
+        self.incChangeCount()
     },
-    addValues: function (values, beforeIndex) {
-        var _a, _b, _c, _d;
-        var strValues = values.map(function (v) { return self.importValue(v); });
-        var numValues = strValues.map(function (s) { return self.toNumeric(s); });
+    addValues (values, beforeIndex) {
+        let _a, _b, _c, _d
+        let strValues = values.map(function (v) { return self.importValue(v) })
+        let numValues = strValues.map(function (s) { return self.toNumeric(s) })
         if ((beforeIndex != null) && (beforeIndex < self.strValues.length)) {
             (_a = self.strValues).splice.apply(_a, __spreadArray([beforeIndex, 0], strValues, false));
-            (_b = self.numValues).splice.apply(_b, __spreadArray([beforeIndex, 0], numValues, false));
+            (_b = self.numValues).splice.apply(_b, __spreadArray([beforeIndex, 0], numValues, false))
         }
         else {
             (_c = self.strValues).push.apply(_c, strValues);
-            (_d = self.numValues).push.apply(_d, numValues);
+            (_d = self.numValues).push.apply(_d, numValues)
         }
-        self.incChangeCount();
+        self.incChangeCount()
     },
-    setValue: function (index, value, options) {
+    setValue (index, value, options) {
         if ((index >= 0) && (index < self.strValues.length)) {
-            self.strValues[index] = self.importValue(value);
-            self.numValues[index] = self.toNumeric(self.strValues[index]);
+            self.strValues[index] = self.importValue(value)
+            self.numValues[index] = self.toNumeric(self.strValues[index])
             if (!(options === null || options === void 0 ? void 0 : options.noInvalidate))
-                self.incChangeCount();
+                {self.incChangeCount()}
         }
     },
-    setValues: function (indices, values) {
-        var length = indices.length <= values.length ? indices.length : values.length;
-        for (var i = 0; i < length; ++i) {
-            var index = indices[i];
+    setValues (indices, values) {
+        let length = indices.length <= values.length ? indices.length : values.length
+        for (let i = 0; i < length; ++i) {
+            let index = indices[i]
             if ((index >= 0) && (index < self.strValues.length)) {
-                self.strValues[index] = self.importValue(values[i]);
-                self.numValues[index] = self.toNumeric(self.strValues[index]);
+                self.strValues[index] = self.importValue(values[i])
+                self.numValues[index] = self.toNumeric(self.strValues[index])
             }
         }
-        self.incChangeCount();
+        self.incChangeCount()
     },
-    setLength: function (length) {
+    setLength (length) {
         if (self.strValues.length < length) {
-            self.strValues = self.strValues.concat(new Array(length - self.strValues.length).fill(""));
+            self.strValues = self.strValues.concat(new Array(length - self.strValues.length).fill(""))
             if ((0, attribute_types_1.isProduction)()) {
                 // in production mode, `strValues` shares the `values` array since it isn't frozen
-                self.values = self.strValues;
+                self.values = self.strValues
             }
         }
         if (self.numValues.length < length) {
-            self.numValues = self.numValues.concat(new Array(length - self.numValues.length).fill(NaN));
+            self.numValues = self.numValues.concat(new Array(length - self.numValues.length).fill(NaN))
         }
     },
-    removeValues: function (index, count) {
-        if (count === void 0) { count = 1; }
+    removeValues (index, count) {
+        if (count === void 0) { count = 1 }
         if ((index != null) && (index < self.strValues.length) && (count > 0)) {
-            self.strValues.splice(index, count);
-            self.numValues.splice(index, count);
-            self.incChangeCount();
+            self.strValues.splice(index, count)
+            self.numValues.splice(index, count)
+            self.incChangeCount()
         }
     },
     // order the values of the attribute according to the provided indices
-    orderValues: function (indices) {
-        var _strValues = self.strValues.slice();
-        var _numValues = self.numValues.slice();
-        for (var i = 0; i < _strValues.length; ++i) {
-            self.strValues[i] = _strValues[indices[i]];
-            self.numValues[i] = _numValues[indices[i]];
+    orderValues (indices) {
+        let _strValues = self.strValues.slice()
+        let _numValues = self.numValues.slice()
+        for (let i = 0; i < _strValues.length; ++i) {
+            self.strValues[i] = _strValues[indices[i]]
+            self.numValues[i] = _numValues[indices[i]]
         }
     },
-    clearValues: function () {
-        for (var i = self.strValues.length - 1; i >= 0; --i) {
-            self.strValues[i] = "";
-            self.numValues[i] = self.toNumeric(self.strValues[i]);
+    clearValues () {
+        for (let i = self.strValues.length - 1; i >= 0; --i) {
+            self.strValues[i] = ""
+            self.numValues[i] = self.toNumeric(self.strValues[i])
         }
     }
-}); })
-    .actions(apply_model_change_1.applyModelChange);
+}) })
+    .actions(apply_model_change_1.applyModelChange)
 function isFormulaAttr(attr) {
-    return !!(attr === null || attr === void 0 ? void 0 : attr.hasFormula);
+    return !!(attr === null || attr === void 0 ? void 0 : attr.hasFormula)
 }
 function isValidFormulaAttr(attr) {
-    return !!(attr === null || attr === void 0 ? void 0 : attr.hasValidFormula);
+    return !!(attr === null || attr === void 0 ? void 0 : attr.hasValidFormula)
 }

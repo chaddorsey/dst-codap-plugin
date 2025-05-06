@@ -1,4 +1,4 @@
-import { CodapRequest, CodapApiResult } from './codap-types';
+import { CodapRequest, CodapApiResult } from "./codap-types";
 
 /**
  * Interface for communicating with CODAP
@@ -18,7 +18,7 @@ export const codapInterface = {
         values: {}
       };
     } catch (error) {
-      console.error('Error sending request to CODAP:', error);
+      console.error("Error sending request to CODAP:", error);
       return {
         success: false
       };

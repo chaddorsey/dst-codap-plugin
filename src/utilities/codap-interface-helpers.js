@@ -1,21 +1,21 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+let __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+let __generator = (this && this.__generator) || function (thisArg, body) {
+    let _ = { label: 0, sent() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g.throw = verb(1), g.return = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        while (g && (g = 0, op[0] && (_ = 0)), _) {try {
+            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
@@ -31,7 +31,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     _.trys.pop(); continue;
             }
             op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }}
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
@@ -39,14 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAvailableDatasets = getAvailableDatasets;
 exports.saveInteractiveState = saveInteractiveState;
 exports.loadInteractiveState = loadInteractiveState;
-var codap_plugin_api_1 = require("@concord-consortium/codap-plugin-api");
+let codap_plugin_api_1 = require("@concord-consortium/codap-plugin-api");
 /**
  * Get a list of available datasets in CODAP
  * @returns An array of dataset names
  */
 function getAvailableDatasets() {
     return __awaiter(this, void 0, void 0, function () {
-        var result, error_1;
+        let result, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -77,7 +77,7 @@ function getAvailableDatasets() {
  */
 function saveInteractiveState(state) {
     return __awaiter(this, void 0, void 0, function () {
-        var serializableState, error_2;
+        let serializableState, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -119,7 +119,7 @@ function saveInteractiveState(state) {
  */
 function loadInteractiveState() {
     return __awaiter(this, void 0, void 0, function () {
-        var result, error_3;
+        let result, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:

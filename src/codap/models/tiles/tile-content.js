@@ -1,11 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TileContentModel = void 0;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var apply_model_change_1 = require("../history/apply-model-change");
-var tile_environment_1 = require("./tile-environment");
-var tile_model_hooks_1 = require("./tile-model-hooks");
-var unknown_types_1 = require("./unknown-types");
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.TileContentModel = void 0
+let mobx_state_tree_1 = require("mobx-state-tree")
+let apply_model_change_1 = require("../history/apply-model-change")
+let tile_environment_1 = require("./tile-environment")
+let tile_model_hooks_1 = require("./tile-model-hooks")
+let unknown_types_1 = require("./unknown-types")
 // Generic "super class" of all tile content models
 exports.TileContentModel = mobx_state_tree_1.types.model("TileContentModel", {
     // The type field has to be optional because the typescript type created from the sub models
@@ -36,24 +36,24 @@ exports.TileContentModel = mobx_state_tree_1.types.model("TileContentModel", {
 })
     .views(function (self) { return ({
     get tileEnv() {
-        return (0, tile_environment_1.getTileEnvironment)(self);
+        return (0, tile_environment_1.getTileEnvironment)(self)
     },
     // Override in specific tile content model when external data (like from SharedModels) is needed when copying
     get tileSnapshotForCopy() {
-        return (0, mobx_state_tree_1.getSnapshot)(self);
+        return (0, mobx_state_tree_1.getSnapshot)(self)
     },
     // Override in specific tile content model.
     // When false, the tile will not be moved in front of other tiles on focus.
     get allowBringToFront() {
-        return true;
+        return true
     }
-}); })
+}) })
     .actions(function (self) { return ({
-    prepareSnapshot: function () {
+    prepareSnapshot () {
         // Override in derived models as appropriate
-        return Promise.resolve();
+        return Promise.resolve()
     },
-    completeSnapshot: function () {
+    completeSnapshot () {
         // Override in derived models as appropriate
     },
     /**
@@ -70,13 +70,13 @@ exports.TileContentModel = mobx_state_tree_1.types.model("TileContentModel", {
      *
      * @param sharedModel
      */
-    updateAfterSharedModelChanges: function (sharedModel, type) {
-        console.warn("updateAfterSharedModelChanges not implemented for:", self.type);
+    updateAfterSharedModelChanges (sharedModel, type) {
+        console.warn("updateAfterSharedModelChanges not implemented for:", self.type)
     },
-    broadcastMessage: function (message, callback) {
+    broadcastMessage (message, callback) {
         // Override in derived models as appropriate
     }
-}); })
+}) })
     // Add an empty api so the api methods can be used on this generic type
-    .actions(function (self) { return (0, tile_model_hooks_1.tileModelHooks)({}); })
-    .actions(apply_model_change_1.applyModelChange);
+    .actions(function (self) { return (0, tile_model_hooks_1.tileModelHooks)({}) })
+    .actions(apply_model_change_1.applyModelChange)

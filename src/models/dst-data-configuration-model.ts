@@ -12,6 +12,10 @@ const maxDiameter = 15.75;
 // The spec has this at 12, but it is little big with our default data
 export const defaultPointDiameter = 6;
 
+// Number of bins for size legends (single source of truth)
+export const NUM_SIZE_BINS = 4;
+// Note: If there are fewer unique values than bins, D3 will create fewer bins.
+
 export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataConfiguration")
   .props({
     legendRepresentation: types.maybe(types.enumeration(["color", "size"])),
@@ -112,10 +116,19 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
       const selection = self.getCasesForLegendBin(bin, partitionMethod);
       return !!(selection.length > 0 && selection.every((anID: string) => self.dataset?.isCaseSelected(anID)));
     },
+    /**
+     * Returns the point size for a given case ID, using the current legend attribute and partition method.
+     * For categorical legends, maps the value to a size using the category size scale.
+     * For numeric legends, uses a partition-aware D3 scale (quantile/quantize) to map the value to a size.
+     * Falls back to the default point diameter for missing/invalid values or unsupported legend types.
+     * @param id - The case ID
+     * @returns The point diameter (number)
+     */
     getLegendSizeForCase(id: string): number {
       const legendID = self.attributeID("legend");
       const legendAttribute = self.dataset?.getAttribute(legendID);
       if (!id || !legendID || !legendAttribute) {
+        console.warn(`[getLegendSizeForCase] Missing id, legendID, or legendAttribute. Returning default size.`);
         return defaultPointDiameter;
       }
 
@@ -123,17 +136,42 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
       switch (legendType) {
         case "categorical": {
           const legendValue = self.dataset?.getStrValue(id, legendID);
-          if (!legendValue) return defaultPointDiameter;
+          if (!legendValue) {
+            console.warn(`[getLegendSizeForCase] Missing categorical value for id=${id}. Returning default size.`);
+            return defaultPointDiameter;
+          }
           return (self as any).getLegendSizeForCategory(legendValue);
         }
         case "numeric": {
           const legendValue = self.dataset?.getNumeric(id, legendID);
-          if (legendValue == null) return defaultPointDiameter;
-          return (self as any).getLegendSizeForNumericValue(legendValue);
+          if (legendValue == null) {
+            console.warn(`[getLegendSizeForCase] Missing numeric value for id=${id}. Returning default size.`);
+            return defaultPointDiameter;
+          }
+          // Always use the current partitionMethod for numeric size scale
+          const method: "quantile" | "quantize" = (self.partitionMethod === "quantile" || self.partitionMethod === "quantize") ? self.partitionMethod : "quantile";
+          const scale = (self as any).getLegendNumericSizeScale(method);
+          try {
+            const scaleFunction = typeof scale === "function" ? scale : null;
+            if (!scaleFunction) {
+              console.warn(`[getLegendSizeForCase] Size scale is not a function for id=${id}. Returning default size.`);
+              return defaultPointDiameter;
+            }
+            const result = scaleFunction(legendValue);
+            if (!result) {
+              console.warn(`[getLegendSizeForCase] Size scale returned falsy for id=${id}, value=${legendValue}. Returning default size.`);
+              return defaultPointDiameter;
+            }
+            return result;
+          } catch (e) {
+            console.error(`[getLegendSizeForCase] Error in size scale for id=${id}, value=${legendValue}:`, e);
+            return defaultPointDiameter;
+          }
         }
         case "date":
         case "color":
         default:
+          console.warn(`[getLegendSizeForCase] Unsupported legend type (${legendType}) for id=${id}. Returning default size.`);
           return defaultPointDiameter;
       }
     },
@@ -190,8 +228,8 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
       // Use only valid numeric values
       const values = attr.numValues.filter((v: number | undefined) => typeof v === "number" && !isNaN(v)) as number[];
       if (values.length < 2) return scaleQuantize();
-      // Number of bins (match color legend, e.g., 4)
-      const numBins = 4;
+      // Use the single source of truth for number of bins
+      const numBins = NUM_SIZE_BINS;
       // Size range
       const sizeRange = range(minDiameter, maxDiameter + ((maxDiameter-minDiameter)/(numBins-1)*0.9), (maxDiameter-minDiameter)/(numBins-1));
       if (partitionMethod === "quantile") {

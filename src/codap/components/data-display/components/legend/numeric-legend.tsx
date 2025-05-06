@@ -27,7 +27,7 @@ export const NumericLegend =
     useEffect(() => mstAutorun(
       () => {
         // Reference partitionMethod to ensure reactivity
-        const currentPartitionMethod = partitionMethod;
+        const currentPartitionMethod = partitionMethod
         const numberHeight = getStringBounds('0').height
         const labelHeight = getLabelHeight()
         const computeDesiredExtent = () => {
@@ -42,13 +42,13 @@ export const NumericLegend =
         setDesiredExtent(layerIndex, computeDesiredExtent())
 
         // Use the partitionMethod to select the binning type
-        let colorScale;
+        let colorScale
         if (currentPartitionMethod === 'quantize') {
           // Use quantize
-          colorScale = dataConfiguration.getLegendNumericColorScale('quantize');
+          colorScale = dataConfiguration.getLegendNumericColorScale('quantize')
         } else {
           // Default to quantile
-          colorScale = dataConfiguration.getLegendNumericColorScale('quantile');
+          colorScale = dataConfiguration.getLegendNumericColorScale('quantile')
         }
         choroplethLegend(colorScale, choroplethElt,
           {

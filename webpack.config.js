@@ -176,7 +176,7 @@ module.exports = (env, argv) => {
         filename: 'index.html',
         template: 'src/index.html',
         favicon: 'src/public/favicon.ico',
-        publicPath: publicPath,
+        publicPath,
       }),
       ...(DEPLOY_PATH ? [new HtmlWebpackPlugin({
         filename: 'index-top.html',

@@ -1,71 +1,71 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.extractNumeric = exports.isNumber = exports.toNonEmptyValue = exports.isValueNonEmpty = exports.isValueEmpty = exports.sqrtTwoPi = void 0;
-exports.between = between;
-exports.neededSignificantDigits = neededSignificantDigits;
-exports.chooseDecimalPlaces = chooseDecimalPlaces;
-exports.neededSignificantDigitsArray = neededSignificantDigitsArray;
-exports.neededSigDigitsArrayForBinBoundaries = neededSigDigitsArrayForBinBoundaries;
-exports.isFiniteNumber = isFiniteNumber;
-exports.checkNumber = checkNumber;
-exports.goodTickValue = goodTickValue;
-exports.normal = normal;
-exports.quantileOfSortedArray = quantileOfSortedArray;
-exports.fitGaussianGradientDescent = fitGaussianGradientDescent;
-var d3_format_1 = require("d3-format");
-exports.sqrtTwoPi = Math.sqrt(2 * Math.PI);
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.extractNumeric = exports.isNumber = exports.toNonEmptyValue = exports.isValueNonEmpty = exports.isValueEmpty = exports.sqrtTwoPi = void 0
+exports.between = between
+exports.neededSignificantDigits = neededSignificantDigits
+exports.chooseDecimalPlaces = chooseDecimalPlaces
+exports.neededSignificantDigitsArray = neededSignificantDigitsArray
+exports.neededSigDigitsArrayForBinBoundaries = neededSigDigitsArrayForBinBoundaries
+exports.isFiniteNumber = isFiniteNumber
+exports.checkNumber = checkNumber
+exports.goodTickValue = goodTickValue
+exports.normal = normal
+exports.quantileOfSortedArray = quantileOfSortedArray
+exports.fitGaussianGradientDescent = fitGaussianGradientDescent
+let d3_format_1 = require("d3-format")
+exports.sqrtTwoPi = Math.sqrt(2 * Math.PI)
 // locale which uses ASCII minus sign and ignores grouping and currency
-var asciiLocale = (0, d3_format_1.formatLocale)({ minus: "-" });
-var asciiFormat = asciiLocale.format;
+let asciiLocale = (0, d3_format_1.formatLocale)({ minus: "-" })
+let asciiFormat = asciiLocale.format
 function between(num, min, max) {
-    return min < max ? (min <= num && num <= max) : (max <= num && num <= min);
+    return min < max ? (min <= num && num <= max) : (max <= num && num <= min)
 }
 /* Given two numbers, determine the least number of significant figures needed for their display to distinguish
 * between them. */
 function neededSignificantDigits(num1, num2) {
-    var significantDigits = 0, f, done = false;
+    let significantDigits = 0, f, done = false
     while (!done) {
-        f = asciiFormat(".".concat(significantDigits, "r"));
-        var num1str = f(num1), num2str = f(num2);
-        done = num1str !== num2str;
+        f = asciiFormat(".".concat(significantDigits, "r"))
+        let num1str = f(num1), num2str = f(num2)
+        done = num1str !== num2str
         if (!done) {
-            significantDigits++;
+            significantDigits++
         }
     }
-    return significantDigits;
+    return significantDigits
 }
 /* Given a n1 < n < n2, return a string representation of n with an appropriate precision. */
 function chooseDecimalPlaces(n, lower, upper) {
     if (n === Math.round(n)) {
-        return n.toString();
+        return n.toString()
     }
     // Calculate the span between lower and upper
-    var span = upper - lower;
+    let span = upper - lower
     // Logic to choose decimal places based on n's position relative to lower and upper
-    var decimalPlaces;
+    let decimalPlaces
     if (span > 10) {
         // Large span - fewer decimal places needed
-        decimalPlaces = 0;
+        decimalPlaces = 0
     }
     else if (span > 1) {
         // Medium span - moderate precision
-        decimalPlaces = 1;
+        decimalPlaces = 1
     }
     else if (span > 0.1) {
         // Smaller span - higher precision
-        decimalPlaces = 2;
+        decimalPlaces = 2
     }
     else {
         // Very small span - highest precision
-        decimalPlaces = 3;
+        decimalPlaces = 3
     }
     // Adjust for the position of n within the span
     if (Math.abs(n - lower) < span * 0.1 || Math.abs(n - upper) < span * 0.1) {
         // If n is very close to lower or upper, show more precision
-        decimalPlaces += 1;
+        decimalPlaces += 1
     }
     // Format n with the chosen number of decimal places
-    return n.toFixed(decimalPlaces);
+    return n.toFixed(decimalPlaces)
 }
 /**
  * Given an array of numbers, return a new array of significant digits needed for each number in the array to
@@ -76,15 +76,15 @@ function chooseDecimalPlaces(n, lower, upper) {
 function neededSignificantDigitsArray(numbers) {
     return numbers.map(function (num, index) {
         if (index === 0) {
-            return neededSignificantDigits(numbers[1], num);
+            return neededSignificantDigits(numbers[1], num)
         }
         else if (index === numbers.length - 1) {
-            return neededSignificantDigits(numbers[numbers.length - 2], num);
+            return neededSignificantDigits(numbers[numbers.length - 2], num)
         }
         else {
-            return Math.max(neededSignificantDigits(numbers[index - 1], num), neededSignificantDigits(numbers[index + 1], num));
+            return Math.max(neededSignificantDigits(numbers[index - 1], num), neededSignificantDigits(numbers[index + 1], num))
         }
-    });
+    })
 }
 /**
  * Given an array of bin boundary values and an array of numbers, return a new array of significant digits
@@ -92,110 +92,110 @@ function neededSignificantDigitsArray(numbers) {
  * Both the array of bin boundary values and the array of numbers is assumed to be sorted.
  */
 function neededSigDigitsArrayForBinBoundaries(binBoundaries, values) {
-    var sigDigits = function (n1, n2, operator) {
-        var significantDigits = 0, f, done = false;
+    let sigDigits = function (n1, n2, operator) {
+        let significantDigits = 0, f, done = false
         while (!done) {
-            f = asciiFormat(".".concat(significantDigits, "r"));
-            var n1String = f(n1), n1AfterFormatting = Number(n1String);
+            f = asciiFormat(".".concat(significantDigits, "r"))
+            let n1String = f(n1), n1AfterFormatting = Number(n1String)
             switch (operator) {
                 case '<':
-                    done = n1AfterFormatting < n2;
-                    break;
+                    done = n1AfterFormatting < n2
+                    break
                 case ">":
-                    done = n1AfterFormatting > n2;
-                    break;
+                    done = n1AfterFormatting > n2
+                    break
                 case "<=":
-                    done = n1AfterFormatting <= n2;
-                    break;
+                    done = n1AfterFormatting <= n2
+                    break
                 case ">=":
-                    done = n1AfterFormatting >= n2;
+                    done = n1AfterFormatting >= n2
             }
             if (!done) {
-                significantDigits++;
+                significantDigits++
             }
         }
-        return significantDigits;
-    };
-    var lastBinBoundaryIndex = binBoundaries.length - 1, lastValuesIndex = values.length - 1;
+        return significantDigits
+    }
+    let lastBinBoundaryIndex = binBoundaries.length - 1, lastValuesIndex = values.length - 1
     return binBoundaries.map(function (boundaryValue, index) {
-        var leftValue = index === 0 ? boundaryValue
+        let leftValue = index === 0 ? boundaryValue
             : values.find(function (value, i) {
-                return i < lastValuesIndex && value < boundaryValue && values[i + 1] >= boundaryValue;
+                return i < lastValuesIndex && value < boundaryValue && values[i + 1] >= boundaryValue
             }), rightValue = index === lastBinBoundaryIndex ? boundaryValue
             : values.find(function (value, i) {
-                return i > 0 && value > boundaryValue && values[i - 1] <= boundaryValue;
-            });
-        var leftDigits = leftValue !== undefined ? sigDigits(leftValue, boundaryValue, index === 0 ? '<=' : '<') : 0, rightDigits = rightValue !== undefined ? sigDigits(rightValue, boundaryValue, index === lastBinBoundaryIndex ? '>=' : '>') : 0;
-        return Math.max(leftDigits, rightDigits);
-    });
+                return i > 0 && value > boundaryValue && values[i - 1] <= boundaryValue
+            })
+        let leftDigits = leftValue !== undefined ? sigDigits(leftValue, boundaryValue, index === 0 ? '<=' : '<') : 0, rightDigits = rightValue !== undefined ? sigDigits(rightValue, boundaryValue, index === lastBinBoundaryIndex ? '>=' : '>') : 0
+        return Math.max(leftDigits, rightDigits)
+    })
 }
 function isFiniteNumber(x) {
-    return x != null && Number.isFinite(x);
+    return x != null && Number.isFinite(x)
 }
-var isValueEmpty = function (value) { return value == null || value === ""; };
-exports.isValueEmpty = isValueEmpty;
-var isValueNonEmpty = function (value) { return !(0, exports.isValueEmpty)(value); };
-exports.isValueNonEmpty = isValueNonEmpty;
+let isValueEmpty = function (value) { return value == null || value === "" }
+exports.isValueEmpty = isValueEmpty
+let isValueNonEmpty = function (value) { return !(0, exports.isValueEmpty)(value) }
+exports.isValueNonEmpty = isValueNonEmpty
 // returns undefined for empty values, and the value itself for non-empty values
-var toNonEmptyValue = function (value) { return (0, exports.isValueEmpty)(value) ? undefined : value; };
-exports.toNonEmptyValue = toNonEmptyValue;
+let toNonEmptyValue = function (value) { return (0, exports.isValueEmpty)(value) ? undefined : value }
+exports.toNonEmptyValue = toNonEmptyValue
 // Similar to isFiniteNumber, but looser.
 // It allows for strings that can be converted to numbers and treats Infinity and -Infinity as valid numbers.
-var isNumber = function (v) { return (0, exports.isValueNonEmpty)(v) && !isNaN(Number(v)); };
-exports.isNumber = isNumber;
+let isNumber = function (v) { return (0, exports.isValueNonEmpty)(v) && !isNaN(Number(v)) }
+exports.isNumber = isNumber
 // returns whether the value can be interpreted as a number and if so, its value
 // more efficient than isNumber(v) ? Number(v) : NaN because conversion is only performed once
 function checkNumber(value) {
     if (typeof value === "number")
-        return [true, value];
+        {return [true, value]}
     if (value == null || value === "")
-        return [false];
-    var result = Number(value);
-    return isNaN(result) ? [false] : [true, result];
+        {return [false]}
+    let result = Number(value)
+    return isNaN(result) ? [false] : [true, result]
 }
-var extractNumeric = function (v) {
+let extractNumeric = function (v) {
     if (!(0, exports.isValueNonEmpty)(v)) {
-        return null;
+        return null
     }
-    var num = Number(v);
+    let num = Number(v)
     if (!isNaN(num)) {
-        return num;
+        return num
     }
     // Based on the V2 implementation for the backward compatibility.
     if (typeof v === 'string') {
-        var noNumberPattern = /[^.\d-]+/gm;
-        var firstNumericPattern = /(^-?\.?[\d]+(?:\.?[\d]*)?)/gm;
-        var firstPass = v.replace(noNumberPattern, '');
-        var matches = firstPass.match(firstNumericPattern);
-        v = matches ? matches[0] : null;
+        let noNumberPattern = /[^.\d-]+/gm
+        let firstNumericPattern = /(^-?\.?[\d]+(?:\.?[\d]*)?)/gm
+        let firstPass = v.replace(noNumberPattern, '')
+        let matches = firstPass.match(firstNumericPattern)
+        v = matches ? matches[0] : null
     }
-    return (0, exports.isValueNonEmpty)(v) ? Number(v) : null;
-};
-exports.extractNumeric = extractNumeric;
+    return (0, exports.isValueNonEmpty)(v) ? Number(v) : null
+}
+exports.extractNumeric = extractNumeric
 function goodTickValue(iMin, iMax) {
-    var range = (iMin >= iMax) ? Math.abs(iMin) : iMax - iMin, gap = range / 5;
+    let range = (iMin >= iMax) ? Math.abs(iMin) : iMax - iMin, gap = range / 5
     if (gap === 0) {
-        return 1;
+        return 1
     }
     // We move to base 10, so we can get rid of the power of ten.
-    var logTrial = Math.log(gap) / Math.LN10, floor = Math.floor(logTrial), power = Math.pow(10.0, floor);
+    let logTrial = Math.log(gap) / Math.LN10, floor = Math.floor(logTrial), power = Math.pow(10.0, floor)
     // Whatever is left is in the range 1 to 10. Choose desired number
-    var base = Math.pow(10.0, logTrial - floor);
+    let base = Math.pow(10.0, logTrial - floor)
     if (base < 2)
-        base = 1;
+        {base = 1}
     else if (base < 5)
-        base = 2;
+        {base = 2}
     else
-        base = 5;
-    return Math.max(power * base, Number.MIN_VALUE);
+        {base = 5}
+    return Math.max(power * base, Number.MIN_VALUE)
 }
 // The normal distribution function. The amplitude is the height of the curve at the mean.
 // The mean is the center of the curve. The sigma is the standard deviation of the curve.
 // The formula for the normal distribution is:
 // f(x) = amplitude * exp(-(x - mean)^2 / (2 * sigma^2))
 function normal(x, amp, mu, sigma) {
-    var exponent = -(Math.pow(x - mu, 2) / (2 * Math.pow(sigma, 2)));
-    return amp * Math.exp(exponent);
+    let exponent = -(Math.pow(x - mu, 2) / (2 * Math.pow(sigma, 2)))
+    return amp * Math.exp(exponent)
 }
 /**
  * Get the quantile
@@ -204,21 +204,21 @@ function normal(x, amp, mu, sigma) {
  * return quantile value or undefined if ioArray has no elements
  */
 function quantileOfSortedArray(sortedArray, quantile) {
-    var lastIndex = sortedArray.length - 1, i = lastIndex * quantile, // quantile's numeric-real index in 0-(n-1) array
-    i1 = Math.floor(i), i2 = Math.ceil(i), fraction = i - i1;
+    let lastIndex = sortedArray.length - 1, i = lastIndex * quantile, // quantile's numeric-real index in 0-(n-1) array
+    i1 = Math.floor(i), i2 = Math.ceil(i), fraction = i - i1
     if (i < 0) {
-        return undefined; // length === 0, or quantile < 0.0
+        return undefined // length === 0, or quantile < 0.0
     }
     else if (i >= lastIndex) {
-        return sortedArray[lastIndex]; // quantile >= 1.0
+        return sortedArray[lastIndex] // quantile >= 1.0
     }
     else if (i === i1) {
-        return sortedArray[i1]; // quantile falls on data value exactly
+        return sortedArray[i1] // quantile falls on data value exactly
     }
     else {
         // quantile between two data values
         // note that quantile algorithms vary on method used to get value here, there is no fixed standard.
-        return (sortedArray[i2] * fraction + sortedArray[i1] * (1.0 - fraction));
+        return (sortedArray[i2] * fraction + sortedArray[i1] * (1.0 - fraction))
     }
 }
 /**
@@ -228,39 +228,39 @@ function quantileOfSortedArray(sortedArray, quantile) {
 function fitGaussianGradientDescent(points, amp, mu0, sigma0) {
     function sumOfSquares(points1, amp1, mu1, sigma1) {
         return points1.reduce(function (sum, p) {
-            return sum + Math.pow(p.y - normal(p.x, amp1, mu1, sigma1), 2);
-        }, 0);
+            return sum + Math.pow(p.y - normal(p.x, amp1, mu1, sigma1), 2)
+        }, 0)
     }
     // Function to compute the gradient of f at (x, y)
     function gradient(f, x, y, h) {
-        h = h || 1e-3;
-        var fxPlus = f(x + h, y), fxMinus = f(x - h, y), dfdx = (fxPlus - fxMinus) / (2 * h), fyPlus = f(x, y + h), fyMinus = f(x, y - h), dfdy = (fyPlus - fyMinus) / (2 * h);
-        return [dfdx, dfdy];
+        h = h || 1e-3
+        let fxPlus = f(x + h, y), fxMinus = f(x - h, y), dfdx = (fxPlus - fxMinus) / (2 * h), fyPlus = f(x, y + h), fyMinus = f(x, y - h), dfdy = (fyPlus - fyMinus) / (2 * h)
+        return [dfdx, dfdy]
     }
     // Gradient Descent function to find local minimum of f(x, y)
     function gradientDescent(f, x0, y0, numericRange) {
-        var learningRate = 0.001, iterations = 1000, tolerance = 1e-5;
-        var x = x0, y = y0, prevValue = f(x, y); /*,
+        let learningRate = 0.001, iterations = 1000, tolerance = 1e-5
+        let x = x0, y = y0, prevValue = f(x, y) /*,
              logInterval = iterations / 10*/
-        for (var i = 0; i < iterations; i++) {
-            var gradient_ = gradient(f, x, y, numericRange / 100), dfdx = gradient_[0], dfdy = gradient_[1];
+        for (let i = 0; i < iterations; i++) {
+            let gradient_ = gradient(f, x, y, numericRange / 100), dfdx = gradient_[0], dfdy = gradient_[1]
             // Update x and y
-            x -= learningRate * dfdx;
-            y -= learningRate * dfdy;
-            var newValue = f(x, y);
+            x -= learningRate * dfdx
+            y -= learningRate * dfdy
+            let newValue = f(x, y)
             if (Math.abs(newValue - prevValue) < tolerance) {
-                break;
+                break
             }
-            prevValue = newValue;
+            prevValue = newValue
         }
-        return [x, y];
+        return [x, y]
     }
     /**
      * We define this function to pass to gradientDescent, which expects a function of two variables.
      */
     function fToMinimize(mu, sigma) {
-        return sumOfSquares(points, amp, mu, sigma);
+        return sumOfSquares(points, amp, mu, sigma)
     }
-    var muSigma = gradientDescent(fToMinimize, mu0, sigma0, sigma0);
-    return { mu: muSigma[0], sigma: muSigma[1] };
+    let muSigma = gradientDescent(fToMinimize, mu0, sigma0, sigma0)
+    return { mu: muSigma[0], sigma: muSigma[1] }
 }

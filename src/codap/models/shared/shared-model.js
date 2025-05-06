@@ -1,9 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SharedModel = exports.kUnknownSharedModel = void 0;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var js_utils_1 = require("../../utilities/js-utils");
-exports.kUnknownSharedModel = "unknownSharedModel";
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.SharedModel = exports.kUnknownSharedModel = void 0
+let mobx_state_tree_1 = require("mobx-state-tree")
+let js_utils_1 = require("../../utilities/js-utils")
+exports.kUnknownSharedModel = "unknownSharedModel"
 // Generic "super class" of all shared models
 exports.SharedModel = mobx_state_tree_1.types.model("SharedModel", {
     // The type field has to be optional because the typescript type created from the sub models
@@ -28,13 +28,13 @@ exports.SharedModel = mobx_state_tree_1.types.model("SharedModel", {
     // if a sub type does not override it.
     type: mobx_state_tree_1.types.optional(mobx_state_tree_1.types.string, exports.kUnknownSharedModel),
     // if not provided, will be generated
-    id: mobx_state_tree_1.types.optional(mobx_state_tree_1.types.identifier, function () { return (0, js_utils_1.typedId)("SHAR"); }),
+    id: mobx_state_tree_1.types.optional(mobx_state_tree_1.types.identifier, function () { return (0, js_utils_1.typedId)("SHAR") }),
 })
     .volatile(function (self) { return ({
     indexOfType: -1
-}); })
+}) })
     .actions(function (self) { return ({
-    setIndexOfType: function (index) {
-        self.indexOfType = index;
+    setIndexOfType (index) {
+        self.indexOfType = index
     }
-}); });
+}) })

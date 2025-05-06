@@ -19,7 +19,7 @@ exports.analyzeDateString = analyzeDateString;
 function parseDate(dateStr, format) {
     if (format === void 0) { format = "auto"; }
     if (!dateStr)
-        return undefined;
+        {return undefined;}
     try {
         if (format === "auto") {
             return tryParseDate(dateStr);
@@ -40,11 +40,11 @@ function parseDate(dateStr, format) {
  */
 function tryParseDate(dateStr) {
     if (!dateStr)
-        return undefined;
-    var cleanedStr = String(dateStr).trim();
+        {return undefined;}
+    let cleanedStr = String(dateStr).trim();
     if (!cleanedStr)
-        return undefined;
-    var timestamp;
+        {return undefined;}
+    let timestamp;
     // Try to parse as ISO format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)
     if (/^\d{4}-\d{2}-\d{2}/.test(cleanedStr)) {
         var date = new Date(cleanedStr);
@@ -167,7 +167,7 @@ function tryParseDate(dateStr) {
     }
     // Try numbers that might be timestamps
     if (!timestamp && /^\d+$/.test(cleanedStr)) {
-        var num = parseInt(cleanedStr, 10);
+        let num = parseInt(cleanedStr, 10);
         // Unix timestamp (seconds since epoch)
         if (cleanedStr.length === 10) {
             var date = new Date(num * 1000);
@@ -255,18 +255,18 @@ function parseDateWithFormat(dateStr, format) {
  */
 function createDateFromComponents(year, month, day) {
     // Default to 2000-01-01 for any missing component
-    var y = year || 2000;
-    var m = (month || 1) - 1; // JavaScript months are 0-indexed
-    var d = day || 1;
+    let y = year || 2000;
+    let m = (month || 1) - 1; // JavaScript months are 0-indexed
+    let d = day || 1;
     return Date.UTC(y, m, d);
 }
 function padZero(num) {
     return num < 10 ? "0".concat(num) : num;
 }
 function formatDateString(date) {
-    var month = padZero(date.getMonth() + 1);
-    var day = padZero(date.getDate());
-    var year = padZero(date.getFullYear() % 100);
+    let month = padZero(date.getMonth() + 1);
+    let day = padZero(date.getDate());
+    let year = padZero(date.getFullYear() % 100);
     return "".concat(month, "/").concat(day, "/").concat(year);
 }
 function datePercentInRange(date, min, max) {
@@ -288,10 +288,10 @@ function analyzeDateString(dateStr) {
             isValid: false
         };
     }
-    var cleaned = String(dateStr).trim();
-    var format = "unknown";
-    var formatDetails = "";
-    var parsed = null;
+    let cleaned = String(dateStr).trim();
+    let format = "unknown";
+    let formatDetails = "";
+    let parsed = null;
     // Try ISO format
     if (/^\d{4}-\d{2}-\d{2}/.test(cleaned)) {
         format = "iso";
@@ -348,7 +348,7 @@ function analyzeDateString(dateStr) {
     }
     // Try just numbers
     else if (/^\d+$/.test(cleaned)) {
-        var num = parseInt(cleaned, 10);
+        let num = parseInt(cleaned, 10);
         if (cleaned.length === 10) { // Unix timestamp (seconds)
             format = "timestamp_seconds";
             formatDetails = "Unix timestamp (seconds)";
@@ -385,11 +385,11 @@ function analyzeDateString(dateStr) {
         formatDetails = "Using JavaScript Date constructor";
         parsed = new Date(cleaned);
     }
-    var isValid = parsed !== null && !isNaN(parsed.getTime());
+    let isValid = parsed !== null && !isNaN(parsed.getTime());
     return {
-        format: format,
-        formatDetails: formatDetails,
-        parsed: parsed,
-        isValid: isValid
+        format,
+        formatDetails,
+        parsed,
+        isValid
     };
 }

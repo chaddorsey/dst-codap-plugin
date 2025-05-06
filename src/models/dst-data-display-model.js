@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DstDataDisplayModel = exports.DstLayerModel = void 0;
 exports.isDstDataDisplayModel = isDstDataDisplayModel;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var dst_data_configuration_model_1 = require("./dst-data-configuration-model");
+let mobx_state_tree_1 = require("mobx-state-tree");
+let dst_data_configuration_model_1 = require("./dst-data-configuration-model");
 exports.DstLayerModel = mobx_state_tree_1.types.model("DstLayerModel", {
     layerIndex: mobx_state_tree_1.types.number,
     id: mobx_state_tree_1.types.string,
@@ -21,7 +21,7 @@ exports.DstDataDisplayModel = mobx_state_tree_1.types.model("DstDataDisplayModel
     }
 }); })
     .actions(function (self) { return ({
-    placeCanAcceptAttributeIDDrop: function (place, dataset, attributeID) {
+    placeCanAcceptAttributeIDDrop (place, dataset, attributeID) {
         return false;
     }
 }); });

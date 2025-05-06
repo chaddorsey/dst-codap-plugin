@@ -39,7 +39,7 @@ describe("CODAP Interface Helpers", () => {
         const result = await codapInterface.sendRequest({
           action: "get",
           resource: "dataContextList"
-        }) as { success: boolean, values?: Array<{ name: string }> };
+        }) as { success: boolean, values?: { name: string }[] };
         
         if (result.success && result.values) {
           return result.values.map((context) => context.name);
@@ -71,7 +71,7 @@ describe("CODAP Interface Helpers", () => {
         const result = await codapInterface.sendRequest({
           action: "get",
           resource: "dataContextList"
-        }) as { success: boolean, values?: Array<{ name: string }> };
+        }) as { success: boolean, values?: { name: string }[] };
         
         if (result.success && result.values) {
           return result.values.map((context) => context.name);

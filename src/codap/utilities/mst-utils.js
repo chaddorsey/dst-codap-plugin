@@ -1,29 +1,29 @@
-"use strict";
+"use strict"
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
+            s = arguments[i]
+            for (let p in s) {if (Object.prototype.hasOwnProperty.call(s, p))
+                {t[p] = s[p]}}
         }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.safeGetSnapshot = safeGetSnapshot;
-exports.typeField = typeField;
-exports.getParentWithTypeName = getParentWithTypeName;
-exports.isAliveSafe = isAliveSafe;
-exports.verifyAlive = verifyAlive;
-exports.onAnyAction = onAnyAction;
-exports.cachedFnFactory = cachedFnFactory;
-exports.cachedFnWithArgsFactory = cachedFnWithArgsFactory;
-exports.getDocumentContentPropertyFromNode = getDocumentContentPropertyFromNode;
-var mobx_1 = require("mobx");
-var mobx_state_tree_1 = require("mobx-state-tree");
+        return t
+    }
+    return __assign.apply(this, arguments)
+}
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.safeGetSnapshot = safeGetSnapshot
+exports.typeField = typeField
+exports.getParentWithTypeName = getParentWithTypeName
+exports.isAliveSafe = isAliveSafe
+exports.verifyAlive = verifyAlive
+exports.onAnyAction = onAnyAction
+exports.cachedFnFactory = cachedFnFactory
+exports.cachedFnWithArgsFactory = cachedFnWithArgsFactory
+exports.getDocumentContentPropertyFromNode = getDocumentContentPropertyFromNode
+let mobx_1 = require("mobx")
+let mobx_state_tree_1 = require("mobx-state-tree")
 function safeGetSnapshot(target) {
-    return target ? (0, mobx_state_tree_1.getSnapshot)(target) : undefined;
+    return target ? (0, mobx_state_tree_1.getSnapshot)(target) : undefined
 }
 /**
  * This creates the definition for a type field in MST.
@@ -34,7 +34,7 @@ function safeGetSnapshot(target) {
  * @returns
  */
 function typeField(typeName) {
-    return mobx_state_tree_1.types.optional(mobx_state_tree_1.types.literal(typeName), typeName);
+    return mobx_state_tree_1.types.optional(mobx_state_tree_1.types.literal(typeName), typeName)
 }
 /**
  * Returns an ancestor of a node whose type name is `typeName`, if any.
@@ -42,18 +42,18 @@ function typeField(typeName) {
  * parent type, which can cause circular reference errors in MST.
  */
 function getParentWithTypeName(target, typeName) {
-    var current = target;
+    let current = target
     while ((0, mobx_state_tree_1.hasParent)(current)) {
-        var parent_1 = (0, mobx_state_tree_1.getParent)(current);
-        var type = (0, mobx_state_tree_1.getType)(parent_1);
+        let parent_1 = (0, mobx_state_tree_1.getParent)(current)
+        let type = (0, mobx_state_tree_1.getType)(parent_1)
         if (type.name === typeName)
-            return parent_1;
-        current = parent_1;
+            {return parent_1}
+        current = parent_1
     }
-    return undefined;
+    return undefined
 }
 function isAliveSafe(target) {
-    return !!target && (0, mobx_state_tree_1.isAlive)(target);
+    return !!target && (0, mobx_state_tree_1.isAlive)(target)
 }
 /**
  * A short circuit isAlive check. It is intended to be used in observing
@@ -74,9 +74,9 @@ function isAliveSafe(target) {
  * https://github.com/concord-consortium/collaborative-learning/blob/master/src/components/mobx-react-mst.test.tsx
  */
 function verifyAlive(target, source) {
-    if (source === void 0) { source = "unknown"; }
+    if (source === void 0) { source = "unknown" }
     if (!(0, mobx_state_tree_1.isAlive)(target)) {
-        console.warn("Destroyed MST Object is being accessed from ".concat(source, ". Type: ").concat((0, mobx_state_tree_1.getType)(target)));
+        console.warn("Destroyed MST Object is being accessed from ".concat(source, ". Type: ").concat((0, mobx_state_tree_1.getType)(target)))
     }
 }
 /**
@@ -90,7 +90,7 @@ function verifyAlive(target, source) {
  * @returns
  */
 function onAnyAction(target, listener, options) {
-    return (0, mobx_state_tree_1.onAction)(target, listener, __assign({ attachAfter: true, allActions: true }, options));
+    return (0, mobx_state_tree_1.onAction)(target, listener, {attachAfter: true, allActions: true, ...options})
 }
 /**
  * A function factory that returns a lazily evaluated function that doesn't take arguments and will return the same
@@ -100,19 +100,19 @@ function onAnyAction(target, listener, options) {
  * @returns a function that will return the same value until invalidate() is called.
  */
 function cachedFnFactory(calculate) {
-    var valid = false;
-    var cachedValue;
-    var getter = function () {
+    let valid = false
+    let cachedValue
+    let getter = function () {
         if (!valid) {
-            cachedValue = calculate();
-            valid = true;
+            cachedValue = calculate()
+            valid = true
         }
-        return cachedValue;
-    };
+        return cachedValue
+    }
     getter.invalidate = function () {
-        valid = false;
-    };
-    return getter;
+        valid = false
+    }
+    return getter
 }
 /**
  * A function factory that returns a lazily evaluated function, which takes arguments and will return the same value
@@ -126,37 +126,37 @@ function cachedFnWithArgsFactory(options) {
     // TypeScript generics are a bit complicated here. However, they ensure that invalidate() function is called
     // with the same arguments as the calculate() function. It will work even if the client code completely skips
     // explicit type definition between < and >.
-    var key = options.key, calculate = options.calculate, name = options.name;
+    let key = options.key, calculate = options.calculate, name = options.name
     // The map is observable so any observers will be triggered when the cache is updated
     // The values within the map are not automatically made observable since
     // cachedFnWithArgsFactory is usually used in cases where the values are large objects
     // and usually a whole new value object is created by on each calculate call
-    var cacheMap = mobx_1.observable.map({}, { name: name || "cachedFnWithArgs", deep: false });
-    var getter = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+    let cacheMap = mobx_1.observable.map({}, { name: name || "cachedFnWithArgs", deep: false })
+    let getter = function () {
+        let args = []
+        for (let _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i]
         }
-        var cacheKey = key.apply(void 0, args);
+        let cacheKey = key.apply(void 0, args)
         if (!cacheMap.has(cacheKey)) {
-            cacheMap.set(cacheKey, calculate.apply(void 0, args));
+            cacheMap.set(cacheKey, calculate.apply(void 0, args))
         }
-        return cacheMap.get(cacheKey);
-    };
+        return cacheMap.get(cacheKey)
+    }
     getter.invalidate = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+        let args = []
+        for (let _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i]
         }
-        var cacheKey = key.apply(void 0, args);
-        cacheMap.delete(cacheKey);
-    };
+        let cacheKey = key.apply(void 0, args)
+        cacheMap.delete(cacheKey)
+    }
     getter.invalidateAll = function () {
-        cacheMap.clear();
-    };
-    return getter;
+        cacheMap.clear()
+    }
+    return getter
 }
 function getDocumentContentPropertyFromNode(node, propName) {
-    var docContent = getParentWithTypeName(node, "DocumentContent");
-    return docContent ? docContent[propName] : undefined;
+    let docContent = getParentWithTypeName(node, "DocumentContent")
+    return docContent ? docContent[propName] : undefined
 }

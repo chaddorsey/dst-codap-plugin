@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.graph = exports.kMinDatePercentRange = exports.graphMax = exports.graphMin = void 0;
-var mobx_1 = require("mobx");
-var constants_1 = require("../utilities/constants");
-var date_utils_1 = require("../utilities/date-utils");
-var trig_utils_1 = require("../utilities/trig-utils");
-var codap_data_1 = require("./codap-data");
+let mobx_1 = require("mobx");
+let constants_1 = require("../utilities/constants");
+let date_utils_1 = require("../utilities/date-utils");
+let trig_utils_1 = require("../utilities/trig-utils");
+let codap_data_1 = require("./codap-data");
 exports.graphMin = -5;
 exports.graphMax = 5;
-var graphRange = exports.graphMax - exports.graphMin;
-var minWidth = 5;
-var zoomAmount = 2.5;
-var animationDuration = 200;
-var dateAnimationRate = 0.1;
+let graphRange = exports.graphMax - exports.graphMin;
+let minWidth = 5;
+let zoomAmount = 2.5;
+let animationDuration = 200;
+let dateAnimationRate = 0.1;
 exports.kMinDatePercentRange = 0.01;
-var Graph = /** @class */ (function () {
+let Graph = /** @class */ (function () {
     function Graph() {
         this.maxDatePercent = 1;
         this.minDatePercent = 0;
@@ -40,7 +40,7 @@ var Graph = /** @class */ (function () {
     Graph.prototype.animate = function (dt) {
         if (this.animationPercentage != null) {
             this.animationPercentage = Math.min(this.animationPercentage + dt / animationDuration, 1);
-            var smoothPercentage = Math.sin((this.animationPercentage * 2 - 1) * trig_utils_1.halfPi) / 2 + .5;
+            let smoothPercentage = Math.sin((this.animationPercentage * 2 - 1) * trig_utils_1.halfPi) / 2 + .5;
             if (this.targetMaxLat != null && this.startMaxLat != null) {
                 this.setMaxLatitude(this.startMaxLat + (this.targetMaxLat - this.startMaxLat) * smoothPercentage);
             }
@@ -75,10 +75,10 @@ var Graph = /** @class */ (function () {
     };
     // Sets up an animation to move the camera to the given values.
     Graph.prototype.animateTo = function (_a) {
-        var _b, _c, _d, _e;
-        var maxLatitude = _a.maxLatitude, minLatitude = _a.minLatitude, maxLongitude = _a.maxLongitude, minLongitude = _a.minLongitude;
+        let _b, _c, _d, _e;
+        let maxLatitude = _a.maxLatitude, minLatitude = _a.minLatitude, maxLongitude = _a.maxLongitude, minLongitude = _a.minLongitude;
         if (maxLatitude == null && minLatitude == null && maxLongitude == null && minLongitude == null)
-            return;
+            {return;}
         this.animationPercentage = 0;
         this.startMaxLat = this.maxLatitude;
         this.startMinLat = this.minLatitude;
@@ -90,19 +90,19 @@ var Graph = /** @class */ (function () {
         this.targetMinLong = (_e = minLongitude !== null && minLongitude !== void 0 ? minLongitude : this.targetMinLong) !== null && _e !== void 0 ? _e : this.minLongitude;
     };
     Graph.prototype.caseIsVisible = function (caseId) {
-        var latitude = codap_data_1.codapData.getLatitude(caseId);
-        var longitude = codap_data_1.codapData.getLongitude(caseId);
+        let latitude = codap_data_1.codapData.getLatitude(caseId);
+        let longitude = codap_data_1.codapData.getLongitude(caseId);
         if (latitude == null || longitude == null)
-            return false;
-        var datePercent = this.convertCaseDateToPercent(caseId);
+            {return false;}
+        let datePercent = this.convertCaseDateToPercent(caseId);
         if (datePercent === undefined)
-            return false;
+            {return false;}
         return latitude >= this.minLatitude && latitude <= this.maxLatitude &&
             longitude >= this.minLongitude && longitude <= this.maxLongitude &&
             datePercent >= this.minDatePercent && datePercent <= this.currentDatePercent;
     };
     Graph.prototype.convertCaseDate = function (caseId) {
-        var date = codap_data_1.codapData.getCaseDate(caseId);
+        let date = codap_data_1.codapData.getCaseDate(caseId);
         return date !== undefined && isFinite(date) ? date : this.defaultDate;
     };
     Graph.prototype.convertCaseDateToGraph = function (caseId) {
@@ -118,11 +118,11 @@ var Graph = /** @class */ (function () {
         return (date - codap_data_1.codapData.absoluteMinDate) / codap_data_1.codapData.absoluteDateRange;
     };
     Graph.prototype.convertLat = function (_lat) {
-        var lat = _lat !== null && _lat !== void 0 ? _lat : this.defaultLat;
+        let lat = _lat !== null && _lat !== void 0 ? _lat : this.defaultLat;
         return ((lat - this.minLatitude) / this.latRange) * graphRange + exports.graphMin;
     };
     Graph.prototype.convertLong = function (_long) {
-        var long = _long !== null && _long !== void 0 ? _long : this.defaultLong;
+        let long = _long !== null && _long !== void 0 ? _long : this.defaultLong;
         return ((long - this.minLongitude) / this.longRange) * graphRange + exports.graphMin;
     };
     Graph.prototype.convertPercentToDate = function (percent) {
@@ -132,42 +132,42 @@ var Graph = /** @class */ (function () {
         return (percent - this.minDatePercent) / (this.maxDatePercent - this.minDatePercent) * graphRange + exports.graphMin;
     };
     Object.defineProperty(Graph.prototype, "canAnimateDate", {
-        get: function () {
+        get () {
             return this.currentDatePercent < this.maxDatePercent;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canPanDown", {
-        get: function () {
+        get () {
             return this.minLatitude > this.absoluteMinLatitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canPanLeft", {
-        get: function () {
+        get () {
             return this.minLongitude > this.absoluteMinLongitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canPanRight", {
-        get: function () {
+        get () {
             return this.maxLongitude < this.absoluteMaxLongitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canPanUp", {
-        get: function () {
+        get () {
             return this.maxLatitude < this.absoluteMaxLatitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canReset", {
-        get: function () {
+        get () {
             return this.maxLatitude !== this.homeMaxLatitude || this.minLatitude !== this.homeMinLatitude ||
                 this.maxLongitude !== this.homeMaxLongitude || this.minLongitude !== this.homeMinLongitude;
         },
@@ -175,125 +175,125 @@ var Graph = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canZoomIn", {
-        get: function () {
-            var _a;
-            var longRange = (_a = this.targetLongRange) !== null && _a !== void 0 ? _a : this.longRange;
+        get () {
+            let _a;
+            let longRange = (_a = this.targetLongRange) !== null && _a !== void 0 ? _a : this.longRange;
             return longRange > minWidth;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "canZoomOut", {
-        get: function () {
-            var _a;
-            var longRange = (_a = this.targetLongRange) !== null && _a !== void 0 ? _a : this.longRange;
+        get () {
+            let _a;
+            let longRange = (_a = this.targetLongRange) !== null && _a !== void 0 ? _a : this.longRange;
             return longRange < this.maxWidth;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "centerLat", {
-        get: function () {
+        get () {
             return (this.minLatitude + this.maxLatitude) / 2;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "centerLong", {
-        get: function () {
+        get () {
             return (this.minLongitude + this.maxLongitude) / 2;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "centerX", {
-        get: function () {
+        get () {
             return this.convertLat(this.centerLat);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "centerZ", {
-        get: function () {
+        get () {
             return this.convertLong(this.centerLong);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "dateRange", {
-        get: function () {
+        get () {
             return this.maxDate - this.minDate;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "defaultDate", {
-        get: function () {
+        get () {
             return this.minDate + this.dateRange / 2;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "defaultLat", {
-        get: function () {
+        get () {
             return this.minLatitude + this.latRange / 2;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "defaultLong", {
-        get: function () {
+        get () {
             return this.minLongitude + this.longRange / 2;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "latRange", {
-        get: function () {
+        get () {
             return this.maxLatitude - this.minLatitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "longRange", {
-        get: function () {
+        get () {
             return this.maxLongitude - this.minLongitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "mapPosition", {
-        get: function () {
+        get () {
             return this.convertPercentToGraph(this.mapDatePercent);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "maxDate", {
-        get: function () {
+        get () {
             return this.convertPercentToDate(this.maxDatePercent);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "maxWidth", {
-        get: function () {
+        get () {
             return this.absoluteMaxLongitude - this.absoluteMinLongitude;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "minDate", {
-        get: function () {
+        get () {
             return this.convertPercentToDate(this.minDatePercent);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "targetLongRange", {
-        get: function () {
+        get () {
             if (this.targetMaxLong != null && this.targetMinLong != null)
-                return this.targetMaxLong - this.targetMinLong;
+                {return this.targetMaxLong - this.targetMinLong;}
         },
         enumerable: false,
         configurable: true
@@ -309,30 +309,30 @@ var Graph = /** @class */ (function () {
     };
     Graph.prototype.panDown = function (amount) {
         if (!this.canPanDown)
-            return;
-        var __amount = amount !== null && amount !== void 0 ? amount : this.latRange / 4;
-        var _amount = Math.min(Math.abs(__amount), this.minLatitude - this.absoluteMinLatitude);
+            {return;}
+        let __amount = amount !== null && amount !== void 0 ? amount : this.latRange / 4;
+        let _amount = Math.min(Math.abs(__amount), this.minLatitude - this.absoluteMinLatitude);
         this.animateTo({ maxLatitude: this.maxLatitude - _amount, minLatitude: this.minLatitude - _amount });
     };
     Graph.prototype.panLeft = function (amount) {
         if (!this.canPanLeft)
-            return;
-        var __amount = amount !== null && amount !== void 0 ? amount : this.longRange / 4;
-        var _amount = Math.min(Math.abs(__amount), this.minLongitude - this.absoluteMinLongitude);
+            {return;}
+        let __amount = amount !== null && amount !== void 0 ? amount : this.longRange / 4;
+        let _amount = Math.min(Math.abs(__amount), this.minLongitude - this.absoluteMinLongitude);
         this.animateTo({ maxLongitude: this.maxLongitude - _amount, minLongitude: this.minLongitude - _amount });
     };
     Graph.prototype.panRight = function (amount) {
         if (!this.canPanRight)
-            return;
-        var __amount = amount !== null && amount !== void 0 ? amount : this.longRange / 4;
-        var _amount = Math.min(Math.abs(__amount), this.absoluteMaxLongitude - this.maxLongitude);
+            {return;}
+        let __amount = amount !== null && amount !== void 0 ? amount : this.longRange / 4;
+        let _amount = Math.min(Math.abs(__amount), this.absoluteMaxLongitude - this.maxLongitude);
         this.animateTo({ maxLongitude: this.maxLongitude + _amount, minLongitude: this.minLongitude + _amount });
     };
     Graph.prototype.panUp = function (amount) {
         if (!this.canPanUp)
-            return;
-        var __amount = amount !== null && amount !== void 0 ? amount : this.latRange / 4;
-        var _amount = Math.min(Math.abs(__amount), this.absoluteMaxLatitude - this.maxLatitude);
+            {return;}
+        let __amount = amount !== null && amount !== void 0 ? amount : this.latRange / 4;
+        let _amount = Math.min(Math.abs(__amount), this.absoluteMaxLatitude - this.maxLatitude);
         this.animateTo({ maxLatitude: this.maxLatitude + _amount, minLatitude: this.minLatitude + _amount });
     };
     Graph.prototype.reset = function () {
@@ -389,21 +389,21 @@ var Graph = /** @class */ (function () {
         this.minLongitude = Math.max(this.absoluteMinLongitude, long);
     };
     Graph.prototype.zoomIn = function () {
-        var _a, _b, _c, _d;
-        var _zoomAmount = Math.min(zoomAmount, (this.longRange - minWidth) / 2);
-        var maxLatitude = ((_a = this.targetMaxLat) !== null && _a !== void 0 ? _a : this.maxLatitude) - _zoomAmount * constants_1.kLatScale;
-        var minLatitude = ((_b = this.targetMinLat) !== null && _b !== void 0 ? _b : this.minLatitude) + _zoomAmount * constants_1.kLatScale;
-        var maxLongitude = ((_c = this.targetMaxLong) !== null && _c !== void 0 ? _c : this.maxLongitude) - _zoomAmount;
-        var minLongitude = ((_d = this.targetMinLong) !== null && _d !== void 0 ? _d : this.minLongitude) + _zoomAmount;
-        this.animateTo({ maxLatitude: maxLatitude, minLatitude: minLatitude, maxLongitude: maxLongitude, minLongitude: minLongitude });
+        let _a, _b, _c, _d;
+        let _zoomAmount = Math.min(zoomAmount, (this.longRange - minWidth) / 2);
+        let maxLatitude = ((_a = this.targetMaxLat) !== null && _a !== void 0 ? _a : this.maxLatitude) - _zoomAmount * constants_1.kLatScale;
+        let minLatitude = ((_b = this.targetMinLat) !== null && _b !== void 0 ? _b : this.minLatitude) + _zoomAmount * constants_1.kLatScale;
+        let maxLongitude = ((_c = this.targetMaxLong) !== null && _c !== void 0 ? _c : this.maxLongitude) - _zoomAmount;
+        let minLongitude = ((_d = this.targetMinLong) !== null && _d !== void 0 ? _d : this.minLongitude) + _zoomAmount;
+        this.animateTo({ maxLatitude, minLatitude, maxLongitude, minLongitude });
     };
     Graph.prototype.zoomOut = function () {
-        var _a, _b, _c, _d;
+        let _a, _b, _c, _d;
         // Always make sure we zoom out zoomAmount * 2 so we maintain a square.
         // To do this, if we bump into the max or min, we increase the other side by the amount we'd go over.
         // If both sides go over, then we'll be capped at the max dimensions anyway.
-        var maxLatitude = ((_a = this.targetMaxLat) !== null && _a !== void 0 ? _a : this.maxLatitude) + zoomAmount * constants_1.kLatScale;
-        var minLatitude = ((_b = this.targetMinLat) !== null && _b !== void 0 ? _b : this.minLatitude) - zoomAmount * constants_1.kLatScale;
+        let maxLatitude = ((_a = this.targetMaxLat) !== null && _a !== void 0 ? _a : this.maxLatitude) + zoomAmount * constants_1.kLatScale;
+        let minLatitude = ((_b = this.targetMinLat) !== null && _b !== void 0 ? _b : this.minLatitude) - zoomAmount * constants_1.kLatScale;
         if (maxLatitude > this.absoluteMaxLatitude) {
             minLatitude -= maxLatitude - this.absoluteMaxLatitude;
             maxLatitude = this.absoluteMaxLatitude;
@@ -412,8 +412,8 @@ var Graph = /** @class */ (function () {
             maxLatitude += this.absoluteMinLatitude - minLatitude;
             minLatitude = this.absoluteMinLatitude;
         }
-        var maxLongitude = ((_c = this.targetMaxLong) !== null && _c !== void 0 ? _c : this.maxLongitude) + zoomAmount;
-        var minLongitude = ((_d = this.targetMinLong) !== null && _d !== void 0 ? _d : this.minLongitude) - zoomAmount;
+        let maxLongitude = ((_c = this.targetMaxLong) !== null && _c !== void 0 ? _c : this.maxLongitude) + zoomAmount;
+        let minLongitude = ((_d = this.targetMinLong) !== null && _d !== void 0 ? _d : this.minLongitude) - zoomAmount;
         if (maxLongitude > this.absoluteMaxLongitude) {
             minLongitude -= maxLongitude - this.absoluteMaxLongitude;
             maxLongitude = this.absoluteMaxLongitude;
@@ -422,7 +422,7 @@ var Graph = /** @class */ (function () {
             maxLongitude += this.absoluteMinLongitude - minLongitude;
             minLongitude = this.absoluteMinLongitude;
         }
-        this.animateTo({ maxLatitude: maxLatitude, minLatitude: minLatitude, maxLongitude: maxLongitude, minLongitude: minLongitude });
+        this.animateTo({ maxLatitude, minLatitude, maxLongitude, minLongitude });
     };
     /**
      * Updates the absolute boundaries of the map based on the dataset

@@ -3,8 +3,8 @@ var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
+            for (let p in s) {if (Object.prototype.hasOwnProperty.call(s, p))
+                {t[p] = s[p];}}
         }
         return t;
     };
@@ -12,21 +12,21 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dstContainer = exports.DstContainer = void 0;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var dst_data_display_model_1 = require("./dst-data-display-model");
-var data_set_1 = require("../codap/models/data/data-set");
-var shared_case_metadata_1 = require("../codap/models/shared/shared-case-metadata");
+let mobx_state_tree_1 = require("mobx-state-tree");
+let dst_data_display_model_1 = require("./dst-data-display-model");
+let data_set_1 = require("../codap/models/data/data-set");
+let shared_case_metadata_1 = require("../codap/models/shared/shared-case-metadata");
 exports.DstContainer = mobx_state_tree_1.types.model("DstContainer", {
     dataDisplayModel: dst_data_display_model_1.DstDataDisplayModel,
     dataSet: data_set_1.DataSet,
     sharedCaseMetadata: shared_case_metadata_1.SharedCaseMetadata,
 });
-var historyServiceEnv = {
+let historyServiceEnv = {
     historyService: {
-        handleApplyModelChange: function (options) {
+        handleApplyModelChange (options) {
             // noop
         },
-        withoutUndo: function (actionCall, options) {
+        withoutUndo (actionCall, options) {
             // noop
         }
     }
@@ -146,5 +146,5 @@ exports.dstContainer = exports.DstContainer.create({
         "lastShownTableOrCardTileId": "TABL956576606772774",
         "attributeColorRanges": {}
     }
-}, __assign({}, historyServiceEnv));
+}, { ...historyServiceEnv});
 window.dstContainer = exports.dstContainer;

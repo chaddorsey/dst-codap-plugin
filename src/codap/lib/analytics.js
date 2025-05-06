@@ -1,6 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mockGA = exports.AnalyticsCategories = void 0;
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.mockGA = exports.AnalyticsCategories = void 0
 exports.AnalyticsCategories = [
     "general", // catch-all for events that we haven't categorized yet
     "data", // Interactions with generated data
@@ -16,15 +16,15 @@ exports.AnalyticsCategories = [
     "calculator", // Calculator interactions (correcting typo)
     "map", // Map interactions
     "webview", // Webview interactions
-];
+]
 exports.mockGA = {
-    gtag: function (event, eventName, data) {
+    gtag (event, eventName, data) {
         /* eslint-disable no-console */
-        console.group("Mock GA4 event payload:");
-        console.debug("Event:", event);
-        console.debug("Event Name:", eventName);
-        console.debug("Data:", JSON.stringify(data, null, 2));
-        console.groupEnd();
+        console.group("Mock GA4 event payload:")
+        console.debug("Event:", event)
+        console.debug("Event Name:", eventName)
+        console.debug("Data:", JSON.stringify(data, null, 2))
+        console.groupEnd()
         /* eslint-enable no-console */
     }
-};
+}

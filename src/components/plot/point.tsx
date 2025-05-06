@@ -34,8 +34,11 @@ export const Point = observer(function Point({ id, visible, x, y, z }: IPointPro
   // Get the color based on the configuration
   const color = colorDataConfig?.getLegendColorForCase(id) || DEFAULT_COLOR;
   
-  // Get the size based on the configuration
-  const size = sizeDataConfig?.getLegendSizeForCase(id) || 10;
+  // Get the size based on the configuration (partition-aware, safe fallback)
+  let size = 10;
+  if (sizeDataConfig && typeof sizeDataConfig.getLegendSizeForCase === "function") {
+    size = sizeDataConfig.getLegendSizeForCase(id) || 10;
+  }
   
   // Calculate the thresholds for the current legend attribute once per render
   // This ensures all points use the same thresholds

@@ -1,15 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.withoutUndo = withoutUndo;
-var mobx_state_tree_1 = require("mobx-state-tree");
-var history_service_1 = require("./history-service");
-var debug_1 = require("../../lib/debug");
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+exports.withoutUndo = withoutUndo
+let mobx_state_tree_1 = require("mobx-state-tree")
+let history_service_1 = require("./history-service")
+let debug_1 = require("../../lib/debug")
 function withoutUndo(options) {
-    var actionCall = (0, mobx_state_tree_1.getRunningActionContext)();
+    let actionCall = (0, mobx_state_tree_1.getRunningActionContext)()
     if (!actionCall) {
-        throw new Error("withoutUndo called outside of an MST action");
+        throw new Error("withoutUndo called outside of an MST action")
     }
-    var context = actionCall.context;
+    let context = actionCall.context
     // The history service might be unset because:
     // withoutUndo is used in MST models which are created directly.
     //
@@ -24,13 +24,13 @@ function withoutUndo(options) {
     // undefined or the same as the document. Using the same environment in
     // two trees seems error prone.
     // An example of this is the `DataBroker.addDataSet` action
-    var historyService = (0, history_service_1.getHistoryServiceMaybe)(context);
+    let historyService = (0, history_service_1.getHistoryServiceMaybe)(context)
     if (debug_1.DEBUG_UNDO && !historyService) {
-        var root = (0, mobx_state_tree_1.getRoot)(context);
+        let root = (0, mobx_state_tree_1.getRoot)(context)
         // Use duck typing to figure out if the root is a tree
         if (root.treeMonitor) {
-            console.warn("history service has not been added to the MST tree");
+            console.warn("history service has not been added to the MST tree")
         }
     }
-    historyService === null || historyService === void 0 ? void 0 : historyService.withoutUndo(actionCall, options);
+    historyService === null || historyService === void 0 ? void 0 : historyService.withoutUndo(actionCall, options)
 }

@@ -1,6 +1,6 @@
-import { OpacityManager } from '../opacity-manager';
+import { OpacityManager } from "../opacity-manager";
 
-describe('OpacityManager', () => {
+describe("OpacityManager", () => {
   let opacityManager: OpacityManager;
 
   beforeEach(() => {
@@ -13,21 +13,21 @@ describe('OpacityManager', () => {
     opacityManager.dispose();
   });
 
-  describe('State Management', () => {
-    it('should initialize with default values', () => {
+  describe("State Management", () => {
+    it("should initialize with default values", () => {
       expect(opacityManager.isLocked).toBeFalsy();
       expect(opacityManager.currentOpacity).toBe(1);
       expect(opacityManager.targetOpacity).toBe(1);
     });
 
-    it('should lock state during updates', () => {
+    it("should lock state during updates", () => {
       opacityManager.lockState();
       expect(opacityManager.isLocked).toBeTruthy();
       opacityManager.unlockState();
       expect(opacityManager.isLocked).toBeFalsy();
     });
 
-    it('should preserve opacity during locked state', () => {
+    it("should preserve opacity during locked state", () => {
       opacityManager.setTargetOpacity(0.5);
       const midOpacity = opacityManager.targetOpacity;
       opacityManager.lockState();
@@ -39,8 +39,8 @@ describe('OpacityManager', () => {
     });
   });
 
-  describe('Opacity Transformations', () => {
-    it('should apply non-linear transformation to display opacity', () => {
+  describe("Opacity Transformations", () => {
+    it("should apply non-linear transformation to display opacity", () => {
       // Test various points along the range
       const testPoints = [0, 0.25, 0.5, 0.75, 1];
       
@@ -62,14 +62,14 @@ describe('OpacityManager', () => {
       });
     });
 
-    it('should handle opacity transitions smoothly', () => {
+    it("should handle opacity transitions smoothly", () => {
       opacityManager.setTargetOpacity(0.5);
       const transitioningOpacity = opacityManager.getTransitioningOpacity();
       expect(transitioningOpacity).toBeLessThanOrEqual(1);
       expect(transitioningOpacity).toBeGreaterThanOrEqual(0);
     });
 
-    it('should complete transitions', () => {
+    it("should complete transitions", () => {
       const targetValue = 0.3;
       opacityManager.setTargetOpacity(targetValue);
       opacityManager.completeTransition();
@@ -77,8 +77,8 @@ describe('OpacityManager', () => {
     });
   });
 
-  describe('Selection State Integration', () => {
-    it('should handle selection state changes', () => {
+  describe("Selection State Integration", () => {
+    it("should handle selection state changes", () => {
       opacityManager.handleSelectionChange(true);
       expect(opacityManager.isLocked).toBeTruthy();
       // Should unlock after internal timeout
@@ -86,7 +86,7 @@ describe('OpacityManager', () => {
       expect(opacityManager.isLocked).toBeFalsy();
     });
 
-    it('should maintain opacity through selection changes', () => {
+    it("should maintain opacity through selection changes", () => {
       opacityManager.setTargetOpacity(0.4);
       const expectedOpacity = opacityManager.targetOpacity;
       opacityManager.handleSelectionChange(true);

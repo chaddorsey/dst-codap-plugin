@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.datasetConfig = exports.DatasetConfiguration = void 0;
-var mobx_state_tree_1 = require("mobx-state-tree");
+let mobx_state_tree_1 = require("mobx-state-tree");
 /**
  * DatasetConfiguration model stores the mapping between dataset attributes and visualization requirements.
  * It tracks which attributes in the CODAP dataset correspond to latitude, longitude, date, etc.
@@ -32,55 +32,55 @@ exports.DatasetConfiguration = mobx_state_tree_1.types
     /**
      * Sets the CODAP data context name
      */
-    setDataContext: function (name) {
+    setDataContext (name) {
         self.dataContextName = name;
     },
     /**
      * Sets the attribute name for latitude values
      */
-    setLatitudeAttribute: function (name) {
+    setLatitudeAttribute (name) {
         self.latitudeAttribute = name;
     },
     /**
      * Sets the attribute name for longitude values
      */
-    setLongitudeAttribute: function (name) {
+    setLongitudeAttribute (name) {
         self.longitudeAttribute = name;
     },
     /**
      * Sets the attribute name for date/time values
      */
-    setDateAttribute: function (name) {
+    setDateAttribute (name) {
         self.dateAttribute = name;
     },
     /**
      * Sets the attribute name for color mapping
      */
-    setColorAttribute: function (name) {
+    setColorAttribute (name) {
         self.colorAttribute = name;
     },
     /**
      * Sets the attribute name for size mapping
      */
-    setSizeAttribute: function (name) {
+    setSizeAttribute (name) {
         self.sizeAttribute = name;
     },
     /**
      * Sets the date format for parsing date strings
      */
-    setDateFormat: function (format) {
+    setDateFormat (format) {
         self.dateFormat = format;
     },
     /**
      * Sets whether the dataset is fully configured
      */
-    setIsConfigured: function (configured) {
+    setIsConfigured (configured) {
         self.isConfigured = configured;
     },
     /**
      * Resets all attribute mappings to undefined
      */
-    resetAttributeMappings: function () {
+    resetAttributeMappings () {
         self.latitudeAttribute = undefined;
         self.longitudeAttribute = undefined;
         self.dateAttribute = undefined;

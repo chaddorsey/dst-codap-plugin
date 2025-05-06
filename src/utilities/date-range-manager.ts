@@ -84,7 +84,7 @@ export class DateRangeManager {
 
       if (!result.success || !result.values) return null;
 
-      if (!('min' in result.values) || !('max' in result.values)) return null;
+      if (!("min" in result.values) || !("max" in result.values)) return null;
       const { min, max } = result.values;
       if (!min || !max) return null;
 
