@@ -254,4 +254,7 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
     }
   }));
 
-export interface IDstDataConfigurationModel extends Instance<typeof DstDataConfigurationModel> { }
+export interface IDstDataConfigurationModel extends Instance<typeof DstDataConfigurationModel> {
+  getCasesInLegendRange(min: number, max: number): string[];
+  getCasesForLegendBin(bin: number, partitionMethod?: 'quantile' | 'quantize'): string[];
+}

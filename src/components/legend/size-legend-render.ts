@@ -35,10 +35,11 @@ export function sizeLegend(
     .enter()
     .append("circle")
     .attr("cx", (d, i) => marginLeft + spacing * (i + 0.5))
-    .attr("cy", marginTop + Math.max(...sizes) / 2)
-    .attr("r", (d, _i) => d / 2)
+    .attr("cy", (d, _i) => marginTop + Math.max(...(sizes as number[])) / 2)
+    .attr("r", (d, _i) => (d as number) / 2)
     .attr("class", (d, i) => casesInBinSelectedHandler(i) ? "legend-key legend-key-selected" : "legend-key")
     .on("click", function(this: SVGCircleElement, event: any, d: unknown) {
+      const datum = d as number;
       // D3 v7: 'this' is the element, 'event' is the event, 'd' is the datum
       // Get the index from the current element
       const circles = Array.from((this.parentNode as SVGGElement).querySelectorAll("circle"));
@@ -52,7 +53,7 @@ export function sizeLegend(
     .enter()
     .append("text")
     .attr("x", (d, i) => marginLeft + spacing * (i + 0.5))
-    .attr("y", marginTop + Math.max(...sizes) + 16)
+    .attr("y", (d, _i) => marginTop + Math.max(...(sizes as number[])) + 16)
     .attr("text-anchor", "middle")
     .text((d, i) => {
       // Show bin range as label

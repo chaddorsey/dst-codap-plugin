@@ -980,6 +980,8 @@ export const DataConfigurationModel = types
   .actions(applyModelChange)
 
 export interface IDataConfigurationModel extends Instance<typeof DataConfigurationModel> {
+  getCasesInLegendRange(min: number, max: number): string[];
+  getCasesForLegendBin(bin: number, partitionMethod?: 'quantile' | 'quantize'): string[];
 }
 
 export interface IDataConfigurationModelSnapshot extends SnapshotIn<typeof DataConfigurationModel> {
