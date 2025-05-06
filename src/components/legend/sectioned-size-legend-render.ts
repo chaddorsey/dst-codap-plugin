@@ -47,6 +47,9 @@ export function sectionedSizeLegend(
     .attr("height", barHeight)
     .attr("rx", barRadius)
     .attr("ry", barRadius)
+    .attr("fill", (_d, i) => casesInBinSelectedHandler(i) ? "#e0e0e0" : "#fff")
+    .attr("stroke", (_d, i) => casesInBinSelectedHandler(i) ? "#888" : "#ccc")
+    .attr("stroke-width", (_d, i) => casesInBinSelectedHandler(i) ? 2 : 1)
     .attr("class", (_d, i) => casesInBinSelectedHandler(i) ? "legend-section legend-section-selected" : "legend-section")
     .on("click", function(this: SVGRectElement, event: any, _d: unknown) {
       const rects = Array.from((this.parentNode as SVGGElement).querySelectorAll("rect"));
@@ -62,6 +65,7 @@ export function sectionedSizeLegend(
     .attr("cx", (_d, i) => marginLeft + sectionWidth * (i + 0.5))
     .attr("cy", barY + barHeight / 2 + dotYOffset)
     .attr("r", (d, _i) => (d as number) / 2)
+    .attr("fill", "#000")
     .attr("class", "legend-dot");
 
   // Draw labels (bin edges) below the bar

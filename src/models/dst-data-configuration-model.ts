@@ -13,13 +13,13 @@ const maxDiameter = 15.75;
 export const defaultPointDiameter = 6;
 
 // Number of bins for size legends (single source of truth)
-export const NUM_SIZE_BINS = 4;
+export const NUM_SIZE_BINS = 5;
 // Note: If there are fewer unique values than bins, D3 will create fewer bins.
 
 export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataConfiguration")
   .props({
     legendRepresentation: types.maybe(types.enumeration(["color", "size"])),
-    partitionMethod: types.optional(types.enumeration(["quantile", "quantize"]), "quantile"),
+    partitionMethod: types.optional(types.enumeration(["quantile", "quantize"]), "quantize"),
   })
   .views(self => ({
     get numericSizeTicks() {
