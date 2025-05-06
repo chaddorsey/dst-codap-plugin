@@ -1,5 +1,5 @@
 import {axisBottom, scaleLinear, select} from "d3";
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState, useMemo} from "react";
 import { IBaseLegendProps } from "../../codap/components/data-display/components/legend/legend-common";
 import { useDataConfigurationContext } from "../../codap/components/data-display/hooks/use-data-configuration-context";
 import { useDataDisplayLayout } from "../../codap/components/data-display/hooks/use-data-display-layout";
@@ -15,17 +15,22 @@ const margin = 30;
 // This is not an observing component because all of its real rendering happens in
 // a mstAutorun.
 export const NumericSizeLegend =
-  function NumericSizeLegend({layerIndex, setDesiredExtent}: IBaseLegendProps) {
+  function NumericSizeLegend({layerIndex, setDesiredExtent, partitionMethod}: IBaseLegendProps) {
 
     const dataConfiguration = useDataConfigurationContext() as IDstDataConfigurationModel;
     const dataDisplayLayout = useDataDisplayLayout();
     const keysElt = useRef(null);
 
-    // useState guarantees the model will only be created once
-    // useMemo doesn't have that guarantee
-    const [legendModel] = useState(
-      () => new NumericSizeLegendModel(dataConfiguration, dataDisplayLayout)
+    // useMemo to re-create the model when partitionMethod, dataConfiguration, or dataDisplayLayout changes
+    const legendModel = useMemo(
+      () => new NumericSizeLegendModel(dataConfiguration, dataDisplayLayout, partitionMethod ?? "quantile"),
+      [dataConfiguration, dataDisplayLayout, partitionMethod]
     );
+
+    // Keep the model's partitionMethod in sync if it changes after creation
+    useEffect(() => {
+      legendModel.setPartitionMethod(partitionMethod ?? "quantile");
+    }, [legendModel, partitionMethod]);
 
     // This is outside of the main autorun because setDesiredExtent might 
     // cause extra re-renders, so it only
@@ -61,13 +66,14 @@ export const NumericSizeLegend =
       };
     }, [layerIndex, setDesiredExtent]);
 
+    // Updated click handler: use getCasesForLegendBin with partitionMethod
     const handleLegendKeyClick = useCallback((event: any, d: NumericSizeLegendKey) => {
-      const caseIds = dataConfiguration?.getCasesForLegendRange(d.min, d.max);
+      const caseIds = dataConfiguration?.getCasesForLegendBin(d.index, partitionMethod);
       if (caseIds) {
         if (event.shiftKey) dataConfiguration?.dataset?.selectCases(caseIds);
         else dataConfiguration?.dataset?.setSelectedCases(caseIds);
       }
-    }, [dataConfiguration]);
+    }, [dataConfiguration, partitionMethod]);
 
     useEffect(() => { return mstAutorun(function d3Render() {
       if (!keysElt.current) return;
@@ -101,7 +107,7 @@ export const NumericSizeLegend =
         .attr("cx", d => axisScale(d.canonicalValue))
         .attr("cy", labelHeight + keySize/2)
         .classed("legend-key-selected", (d) => {
-          return dataConfiguration?.casesInRangeAreSelected(d.min, d.max) ?? false;
+          return dataConfiguration?.casesInBinAreSelected(d.index, partitionMethod) ?? false;
         });
       
       const axis = axisBottom(axisScale).ticks(ticks.length);
@@ -112,7 +118,7 @@ export const NumericSizeLegend =
         .attr("transform", `translate(0 ${labelHeight + legendModel.layoutData.rowHeight})`);
 
     }, {name: "NumericSizeLegend d3 render"}, dataConfiguration); },
-      [dataConfiguration, handleLegendKeyClick, legendModel]
+      [dataConfiguration, handleLegendKeyClick, legendModel, partitionMethod]
     );
 
     return (

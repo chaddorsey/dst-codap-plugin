@@ -1,8 +1,9 @@
-import { extent, nice, ticks, scalePoint, scaleQuantize, range } from "d3";
+import { extent, nice, ticks, scalePoint, scaleQuantize, scaleQuantile, range } from "d3";
 import { types, Instance } from "mobx-state-tree";
 import { DataConfigurationModel } from "../codap/components/data-display/models/data-configuration-model";
 import { CaseData } from "../codap/components/data-display/d3-types";
 import { dataDisplayGetNumericValue } from "../codap/components/data-display/data-display-value-utils";
+import { getScaleThresholds } from "../codap/components/data-display/components/legend/choropleth-legend/choropleth-legend";
 
 // These are diameters
 const minDiameter = 2.25;
@@ -93,14 +94,25 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
           return value !== undefined && value >= min && value < max;
         }).map((aCaseData: CaseData) => aCaseData.caseID)
         : [];
-    }
-  }))
-  .views(self => ({
-    casesInRangeAreSelected(min: number, max: number): boolean {
-      const casesInRange = self.getCasesForLegendRange(min, max);
-      return !!(casesInRange.length > 0 && casesInRange?.every((anID: string) => self.dataset?.isCaseSelected(anID)));
     },
-    getLegendSizeForCase(id: string) {
+    getCasesForLegendBin(bin: number, partitionMethod?: "quantile" | "quantize"): string[] {
+      let method: "quantile" | "quantize" = "quantile";
+      if (partitionMethod === "quantile" || partitionMethod === "quantize") {
+        method = partitionMethod;
+      } else if (self.partitionMethod === "quantile" || self.partitionMethod === "quantize") {
+        method = self.partitionMethod;
+      }
+      const scale = self.getLegendNumericColorScale(method);
+      const thresholds = getScaleThresholds(scale);
+      const min = bin === 0 ? -Infinity : thresholds[bin - 1];
+      const max = bin === thresholds.length ? Infinity : thresholds[bin];
+      return self.getCasesInLegendRange(min, max);
+    },
+    casesInBinAreSelected(bin: number, partitionMethod?: "quantile" | "quantize"): boolean {
+      const selection = self.getCasesForLegendBin(bin, partitionMethod);
+      return !!(selection.length > 0 && selection.every((anID: string) => self.dataset?.isCaseSelected(anID)));
+    },
+    getLegendSizeForCase(id: string): number {
       const legendID = self.attributeID("legend");
       const legendAttribute = self.dataset?.getAttribute(legendID);
       if (!id || !legendID || !legendAttribute) {
@@ -112,12 +124,12 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
         case "categorical": {
           const legendValue = self.dataset?.getStrValue(id, legendID);
           if (!legendValue) return defaultPointDiameter;
-          return self.getLegendSizeForCategory(legendValue);
+          return (self as any).getLegendSizeForCategory(legendValue);
         }
         case "numeric": {
           const legendValue = self.dataset?.getNumeric(id, legendID);
           if (legendValue == null) return defaultPointDiameter;
-          return self.getLegendSizeForNumericValue(legendValue);
+          return (self as any).getLegendSizeForNumericValue(legendValue);
         }
         case "date":
         case "color":
@@ -167,7 +179,36 @@ export const DstDataConfigurationModel = DataConfigurationModel.named("DstDataCo
       } catch {
         return "#888888";
       }
-    }
+    },
+    getLegendNumericSizeScale(partitionMethod: "quantile" | "quantize") {
+      const attrID = self.attributeID("legend");
+      if (!attrID) return scaleQuantize();
+      const dataset = self.dataset;
+      if (!dataset) return scaleQuantize();
+      const attr = dataset.getAttribute(attrID);
+      if (!attr) return scaleQuantize();
+      // Use only valid numeric values
+      const values = attr.numValues.filter((v: number | undefined) => typeof v === "number" && !isNaN(v)) as number[];
+      if (values.length < 2) return scaleQuantize();
+      // Number of bins (match color legend, e.g., 4)
+      const numBins = 4;
+      // Size range
+      const sizeRange = range(minDiameter, maxDiameter + ((maxDiameter-minDiameter)/(numBins-1)*0.9), (maxDiameter-minDiameter)/(numBins-1));
+      if (partitionMethod === "quantile") {
+        // Quantile: bins have equal number of points
+        return scaleQuantile(values, sizeRange);
+      } else {
+        // Quantize: bins have equal value width
+        const minVal = Math.min(...values);
+        const maxVal = Math.max(...values);
+        return scaleQuantize([minVal, maxVal], sizeRange);
+      }
+    },
+    getLegendNumericSizeTicks(partitionMethod: "quantile" | "quantize") {
+      const scale = (self as any).getLegendNumericSizeScale(partitionMethod);
+      // Use getScaleThresholds to extract bin edges
+      return getScaleThresholds(scale);
+    },
   }))
   .actions(self => ({
     setPartitionMethod(method: "quantile" | "quantize") {
